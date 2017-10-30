@@ -3,11 +3,11 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 /**
- * @author Crystal, Zhiling 
- * {@link https://processing.org/examples/regularpolygon.html}
- * {@link https://processing.org/examples/morph.html} 
+ * @author Crystal, Zhiling
+ *         {@link https://processing.org/examples/regularpolygon.html}
+ *         {@link https://processing.org/examples/morph.html}
  */
-public class Shape extends PApplet{
+public class Shape extends PApplet {
 	// store the vertices for different shapes
 	ArrayList<PVector> hexagon = new ArrayList<PVector>();
 	ArrayList<PVector> pentagon = new ArrayList<PVector>();
