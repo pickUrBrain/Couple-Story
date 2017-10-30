@@ -3,7 +3,7 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 /**
- * @author Zhiling 
+ * @author Crystal, Zhiling 
  * {@link https://processing.org/examples/regularpolygon.html}
  * {@link https://processing.org/examples/morph.html} 
  */
