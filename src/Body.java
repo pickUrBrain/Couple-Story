@@ -104,6 +104,49 @@ public class Body {
 		}
 	}
 
+//	/**
+//	 * Returns the Euclidean distance between two PVectors
+//	 * @param p1
+//	 * @param p2
+//	 * @return
+//	 */
+//	public double distanceBtw(PVector p1, PVector p2) {
+//		return Math.abs(magnitude(subtract(p1, p2)));
+//	}
+//
+//	/**
+//	 * Returns the Euclidean norm of a PVector
+//	 * @param p
+//	 * @return
+//	 */
+//	public double magnitude(PVector p) {
+//		return Math.sqrt(dot(p, p));
+//	}
+//
+//	/**
+//	 * Returns the dot product of this vector and that vector
+//	 * 
+//	 * @param that
+//	 * @return
+//	 */
+//	public float dot(PVector p1, PVector p2) {
+//		return p1.x * p2.x + p1.y * p2.y + p1.z * p2.z;
+//	}
+//
+//	/**
+//	 * Returns a vector from this point to that point
+//	 * 
+//	 * @param that
+//	 *            endpoint
+//	 * @return
+//	 */
+//	public PVector subtract(PVector p1, PVector p2) {
+//		float x = p1.x - p2.x;
+//		float y = p1.y - p2.y;
+//		float z = p1.z - p2.z;
+//		return new PVector(x, y, z);
+//	}
+
 	/**
 	 * Rotation is relative to the camera.
 	 * 
