@@ -19,9 +19,13 @@ public class Shape {
 	float centerX;
 	float centerY;
 	float rad; // radius for the shape
+	
 	float angle = 0;
 	float aVelocity = 0;
 	float aAcceleration = 0;
+	PVector head;
+	PVector spineBase;
+
 	ArrayList<PVector> vertices = new ArrayList<PVector>();
 
 	public Shape(PApplet app) {
@@ -33,8 +37,8 @@ public class Shape {
 
 	public void update(Body body) {
 		this.body = body;
-		PVector head = body.getJoint(Body.HEAD);
-		PVector spineBase = body.getJoint(Body.SPINE_BASE);
+		head = body.getJoint(Body.HEAD);
+		spineBase = body.getJoint(Body.SPINE_BASE);
 		centerX = spineBase.x;
 		centerY = spineBase.y;
 		rad = Math.abs(head.dist(spineBase)); // the Euclidean distance between two points
