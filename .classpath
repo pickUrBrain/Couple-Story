@@ -2,12 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="/Users/Zhiling/Downloads/Processing.app/Contents/Java/core/library/core.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/Zhiling/Downloads/Processing.app/Contents/Java/core/library/gluegen-rt-natives-macosx-universal.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/Zhiling/Downloads/Processing.app/Contents/Java/core/library/gluegen-rt.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/Zhiling/Downloads/Processing.app/Contents/Java/core/library/jogl-all-natives-macosx-universal.jar"/>
-	<classpathentry exported="true" kind="lib" path="/Users/Zhiling/Downloads/Processing.app/Contents/Java/core/library/jogl-all.jar"/>
-	<classpathentry kind="lib" path="core.jar"/>
-	<classpathentry kind="lib" path="Contents/Java/core/library/core.jar"/>
+	<classpathentry kind="lib" path="/Applications/Processing.app/Contents/Java/core/library/core.jar"/>
+	<classpathentry kind="lib" path="/Applications/Processing.app/Contents/Java/core/library/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="/Applications/Processing.app/Contents/Java/core/library/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="/Applications/Processing.app/Contents/Java/core/library/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="/Applications/Processing.app/Contents/Java/core/library/jogl-all.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
