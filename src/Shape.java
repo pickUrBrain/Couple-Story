@@ -44,14 +44,39 @@ public class Shape {
 		initSquare();
 	}
 
-	public void draw() {
+	public void draw(int state) {
 		// draw relative to the center of this person
-		morph();
 		app.translate(centerX, centerY);
+		switch (state) {
+		case -1:
+			halfHeart(true); // left heart
+			break;
+		case 0:
+			halfHeart(false); // right heart
+			break;
+		case 1:
+			morph(circle);
+			break;
+		default:
+			morph(square);
+			break;
+		}
+	}
+
+	public void morph(ArrayList<PVector> vertices) {
 		app.strokeWeight(4);
-		app.beginShape();
 		app.noFill();
 		app.stroke(255);
+		app.beginShape();
+		// Look at each vertex
+		for (int i = 0; i < circle.size(); i++) {
+			PVector v1;
+			v1 = vertices.get(i);
+			// Get the vertex we will draw
+			PVector v2 = morph.get(i);
+			// Lerp to the target
+			v2.lerp(v1, (float) 0.1);
+		}
 		for (PVector v : morph) {
 			app.vertex(v.x, v.y);
 		}
@@ -67,21 +92,6 @@ public class Shape {
 		// the Euclidean distance between two points
 		rad = Math.abs(head.dist(spineBase)) / 2f;
 		this.isSquare = isSquare;
-	}
-
-	public void morph() {
-		// Look at each vertex
-		for (int i = 0; i < circle.size(); i++) {
-			PVector v1;
-			if (isSquare)
-				v1 = square.get(i);
-			else
-				v1 = circle.get(i);
-			// Get the vertex we will draw
-			PVector v2 = morph.get(i);
-			// Lerp to the target
-			v2.lerp(v1, (float) 0.1);
-		}
 	}
 
 	public void initCircle() {
@@ -132,6 +142,7 @@ public class Shape {
 
 	}
 
+	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
 	public void halfHeart(boolean isLeft) {
 		app.smooth();
 		app.noStroke();
