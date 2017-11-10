@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.HashMap;
 
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -7,8 +8,12 @@ public class MorphingApplication extends PApplet {
 	
 	Long firstPersonId = null;
 	Long secondPersonId = null;
+
+	//shape.update(body data); draw();
 	
 	KinectBodyDataProvider kinectReader;
+	
+	HashMap<Long, Shape> tracks = new HashMap<Long, Shape>();
 	PersonTracker tracker = new PersonTracker();
 	
 	public static float PROJECTOR_RATIO = 1080f/1920.0f;
@@ -70,6 +75,14 @@ public class MorphingApplication extends PApplet {
 		KinectBodyData bodyData = kinectReader.getData();
 		tracker.update(bodyData);
 		
+		for (Long id: tracker.getEnters()){
+			tracks.put(id, new Shape(this));
+		}
+		for (Long id: tracker.getExits()){
+			tracks.remove(id);
+		}
+		
+		
 		if(firstPersonId == null || secondPersonId == null) {
 			if(!tracker.getPeople().isEmpty()) {
 				for(Long id : tracker.getIds()) {
@@ -93,6 +106,9 @@ public class MorphingApplication extends PApplet {
 		Body person = null;
 		if(tracker.getPeople().containsKey(firstPersonId)) {
 			 person = tracker.getPeople().get(firstPersonId);
+			 Shape s = tracks.get(person.getId());
+			 s.update(person, extraCome());
+			 s.draw();
 		} else {
 			firstPersonId = null;
 		}
@@ -100,13 +116,16 @@ public class MorphingApplication extends PApplet {
 		Body person2 = null;
 		if (tracker.getPeople().containsKey(secondPersonId)){
 			person2 = tracker.getPeople().get(secondPersonId);
+			Shape s = tracks.get(person2.getId());
+			 s.update(person2, extraCome());
+			 s.draw();
 		} else{
 			secondPersonId = null;
 		}
 
-		getJoints(person);
-		getJoints(person2);
-		System.out.println(extraCome());
+//		getJoints(person);
+//		getJoints(person2);
+//		System.out.println(extraCome());
 		
 		//System.out.println(calculateDistance(person.getJoint(Body.SPINE_BASE), person2.getJoint(Body.SPINE_BASE)));
 	}
@@ -196,7 +215,7 @@ public class MorphingApplication extends PApplet {
 
 
 	public static void main(String[] args) {
-		PApplet.main(MultiUserAppDemo.class.getName());
+		PApplet.main(MorphingApplication.class.getName());
 	}
 
 }
