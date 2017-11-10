@@ -46,7 +46,7 @@ public class MultiUserStateDemo extends PApplet {
 	}
 
 	public void settings() {
-		createWindow(true, false, .25f);
+		createWindow(false, false, .25f);
 	}
 
 	public void setup() {
@@ -59,7 +59,7 @@ public class MultiUserStateDemo extends PApplet {
 			try {
 				kinectReader = new KinectBodyDataProvider(recordingFile, 10);
 			} catch (IOException e) {
-				System.out.println("Unable to creat e kinect producer");
+				System.out.println("Unable to create kinect producer");
 			}
 
 		else {

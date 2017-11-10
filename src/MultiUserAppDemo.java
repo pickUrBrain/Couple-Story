@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -9,6 +11,7 @@ public class MultiUserAppDemo extends PApplet {
 
 	
 	Long firstPersonId = null;
+	Long secondPersonId = null;
 	
 	KinectBodyDataProvider kinectReader;
 	PersonTracker tracker = new PersonTracker();
@@ -48,18 +51,14 @@ public class MultiUserAppDemo extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder 
 		 */
 		
-		/*
 		try {
-			kinectReader = new KinectBodyDataProvider("test.kinect", 10);
+			kinectReader = new KinectBodyDataProvider("exitTest.kinect", 30);
 		} catch (IOException e) {
 			System.out.println("Unable to creat e kinect producer");
 		}
-		 */
-		
-		kinectReader = new KinectBodyDataProvider(8008);
-
 		
 		
+		//kinectReader = new KinectBodyDataProvider(8008);
 		kinectReader.start();
 
 	}
@@ -67,8 +66,6 @@ public class MultiUserAppDemo extends PApplet {
 		setScale(.5f);
 		
 		noStroke();
-
-
 
 		background(200,200,200);
 
@@ -78,16 +75,26 @@ public class MultiUserAppDemo extends PApplet {
 		KinectBodyData bodyData = kinectReader.getData();
 		tracker.update(bodyData);
 		
-		if(firstPersonId == null) {
-			if(! tracker.getPeople().isEmpty()) {
+		if(firstPersonId == null || secondPersonId == null) {
+			if(!tracker.getPeople().isEmpty()) {
 				for(Long id : tracker.getIds()) {
-					firstPersonId = id;
-					break; 
+					if (firstPersonId == null && !id.equals(secondPersonId)){
+						firstPersonId = id;
+						System.out.println("firstperson id:" + firstPersonId);
+					}
+					else if (secondPersonId == null && !id.equals(firstPersonId)){
+						secondPersonId = id;
+						System.out.println("secondperson id: " + secondPersonId);
+					}
+					else {
+						break;
+					}
 					// we only care about getting one id					
 					// we will arbitrarily use the first in the set
 				}				
 			}
 		}
+		
 		Body person = null;
 		if(tracker.getPeople().containsKey(firstPersonId)) {
 			 person = tracker.getPeople().get(firstPersonId);
@@ -95,8 +102,21 @@ public class MultiUserAppDemo extends PApplet {
 			firstPersonId = null;
 		}
 		
+		Body person2 = null;
+		if (tracker.getPeople().containsKey(secondPersonId)){
+			person2 = tracker.getPeople().get(secondPersonId);
+		} else{
+			secondPersonId = null;
+		}
 
+		getJoints(person);
+		getJoints(person2);
+		System.out.println(extraCome());
 		
+		//System.out.println(calculateDistance(person.getJoint(Body.SPINE_BASE), person2.getJoint(Body.SPINE_BASE)));
+	}
+	
+	public void getJoints (Body person){
 		if(person != null){
 			PVector head = person.getJoint(Body.HEAD);
 			PVector spine = person.getJoint(Body.SPINE_SHOULDER);
@@ -139,12 +159,23 @@ public class MultiUserAppDemo extends PApplet {
 						footRight.x, footRight.y
 						);
 
-
 			}
-			
-			
-
+			if (spineBase != null && footRight != null){
+				//System.out.println("spine base: " + spineBase.x);
+				//System.out.println("foot right: " + footRight.x);
+			}
 		}
+	}
+	
+	public float calculateDistance(PVector p1, PVector p2){
+		
+		float result = -1;
+		
+		if (p1!=null && p2!=null){
+			result = Math.abs(p1.x - p2.x);
+		}
+		
+		return result;
 	}
 
 	/**
@@ -158,6 +189,14 @@ public class MultiUserAppDemo extends PApplet {
 			ellipse(vec.x, vec.y, .1f,.1f);
 		}
 
+	}
+	
+	
+	public boolean extraCome(){
+		
+		if (firstPersonId != null && secondPersonId != null) return true;
+		
+		return false;
 	}
 
 
