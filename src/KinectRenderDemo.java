@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -39,15 +41,14 @@ public class KinectRenderDemo extends PApplet {
 
 	public void setup() {
 
-		/*
-		 * use this code to run your PApplet from data recorded by UPDRecorder
-		 */
-		/*
-		 * try { kinectReader = new KinectBodyDataProvider("test.kinect", 10); } catch
-		 * (IOException e) { System.out.println("Unable to creat e kinect producer"); }
-		 */
+		//use this code to run your PApplet from data recorded by UPDRecorder
 
-		kinectReader = new KinectBodyDataProvider(8008);
+		 try { kinectReader = new KinectBodyDataProvider("floorTest.kinect", 10); } catch
+		  (IOException e) { System.out.println("Unable to creat e kinect producer"); 
+		  }
+		 
+
+		//kinectReader = new KinectBodyDataProvider(8008);
 		kinectReader.start();
 
 	}
@@ -77,6 +78,7 @@ public class KinectRenderDemo extends PApplet {
 			PVector footRight = person.getJoint(Body.FOOT_RIGHT);
 			PVector handLeft = person.getJoint(Body.HAND_LEFT);
 			PVector handRight = person.getJoint(Body.HAND_RIGHT);
+			
 
 			fill(255, 255, 255);
 			noStroke();

@@ -1,4 +1,3 @@
-
 import processing.core.PApplet;
 
 public class ProjectorProportionsApp extends PApplet {

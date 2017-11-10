@@ -49,7 +49,7 @@ public class UDPReceiver implements Runnable, MsgProvider {
 			/* buffer is filled with the data received */
 			try {
 				// InetAddress address = InetAddress.getByName("127.0.0.1");
-				byte[] msg = new byte[6000];
+				byte[] msg = new byte[64000];
 				packet = new DatagramPacket(msg, msg.length);
 				mySocket.receive(packet);
 
