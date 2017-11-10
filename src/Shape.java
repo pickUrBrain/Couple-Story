@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
-import processing.data.*;
 
 /**
  * @author Crystal, Zhiling
@@ -131,6 +130,23 @@ public class Shape {
 
 	public void initPentagon() {
 
+	}
+
+	public void halfHeart(boolean isLeft) {
+		app.smooth();
+		app.noStroke();
+
+		app.fill(255, 0, 0);
+
+		app.beginShape();
+		if (isLeft) {
+			app.vertex(50, 15);
+			app.bezierVertex(50, -5, 100, 5, 50, 40);
+		} else {
+			app.vertex(50, 15);
+			app.bezierVertex(50, -5, 0, 5, 50, 40);
+		}
+		app.endShape();
 	}
 
 }
