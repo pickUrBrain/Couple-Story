@@ -16,16 +16,19 @@ public class Shape {
 
 	Body body;
 	PApplet app;
+
 	int color;
+
 	float centerX;
 	float centerY;
 	float rad; // radius for the shape
-
-	float angle = 0;
-	float aVelocity = 0;
-	float aAcceleration = 0;
 	PVector head;
 	PVector spineBase;
+
+	// float angle = 0;
+	// float aVelocity = 0;
+	// float aAcceleration = 0;
+
 	// Two ArrayLists to store the vertices for two shapes
 	// This example assumes that each shape will have the same
 	// number of vertices, i.e. the size of each ArrayList will be the same
@@ -36,28 +39,53 @@ public class Shape {
 	public Shape(PApplet app) {
 		this.app = app;
 
-		app.colorMode(PApplet.HSB);
-		color = app.color(app.random(255), 255, 255);
+		// app.colorMode(PApplet.HSB);
+		// color = app.color(app.random(255), 255, 255);
+		initCircle();
+		initSquare();
 	}
 
-	public void update(Body body) {
+	public void draw() {
+		// draw relative to the center of this person
+		morph();
+		app.translate(centerX, centerY);
+		app.strokeWeight(4);
+		app.beginShape();
+		app.noFill();
+		app.stroke(255);
+		for (PVector v : morph) {
+			app.vertex(v.x, v.y);
+		}
+		app.endShape(PApplet.CLOSE);
+	}
+
+	public void update(Body body, boolean isSquare) {
 		this.body = body;
 		head = body.getJoint(Body.HEAD);
 		spineBase = body.getJoint(Body.SPINE_BASE);
 		centerX = spineBase.x;
 		centerY = spineBase.y;
-		rad = Math.abs(head.dist(spineBase)) / 2f; // the Euclidean distance between two points
+		// the Euclidean distance between two points
+		rad = Math.abs(head.dist(spineBase)) / 2f;
+		this.isSquare = isSquare;
 	}
 
-	public void draw() {
-		app.translate(centerX, centerY);
-		if (isSquare)
-			drawPolygon(4);
-		// else
-		// drawCircle();
+	public void morph() {
+		// Look at each vertex
+		for (int i = 0; i < circle.size(); i++) {
+			PVector v1;
+			if (isSquare)
+				v1 = square.get(i);
+			else
+				v1 = circle.get(i);
+			// Get the vertex we will draw
+			PVector v2 = morph.get(i);
+			// Lerp to the target
+			v2.lerp(v1, (float) 0.1);
+		}
 	}
 
-	public void circleVertices() {
+	public void initCircle() {
 		// Create a circle using vectors pointing from center
 		for (int angle = 0; angle < 360; angle += 9) {
 			// Note we are not starting from 0 in order to match the
@@ -70,7 +98,7 @@ public class Shape {
 		}
 	}
 
-	public void sqaureVertices() {
+	public void initSquare() {
 		// A square is a bunch of vertices along straight lines
 		// Top of square
 		for (int x = -50; x < 50; x += 10) {
@@ -90,22 +118,7 @@ public class Shape {
 		}
 	}
 
-	public void morph() {
-		// Look at each vertex
-		for (int i = 0; i < circle.size(); i++) {
-			PVector v1;
-			if (isSquare)
-				v1 = square.get(i);
-			else
-				v1 = circle.get(i);
-			// Get the vertex we will draw
-			PVector v2 = morph.get(i);
-			// Lerp to the target
-			v2.lerp(v1, (float) 0.1);
-		}
-	}
-
-	public void drawPolygon(int npoints) {
+	public void regPolygon(int npoints) {
 		float angle = PConstants.TWO_PI / npoints;
 		app.beginShape();
 		for (float a = 0; a < PConstants.TWO_PI; a += angle) {
@@ -114,6 +127,10 @@ public class Shape {
 			app.vertex(sx, sy);
 		}
 		app.endShape(PConstants.CLOSE);
+	}
+
+	public void initPentagon() {
+
 	}
 
 }
