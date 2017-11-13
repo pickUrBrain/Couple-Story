@@ -35,7 +35,7 @@ public class Shape {
 	public Shape(PApplet app) {
 		this.app = app;
 
-		// app.colorMode(PApplet.HSB);
+		app.colorMode(PApplet.HSB);
 		// color = app.color(app.random(255), 255, 255);
 		initCircle();
 		initSquare();
@@ -74,10 +74,7 @@ public class Shape {
 
 	// tested: is being called
 	public void morph(ArrayList<PVector> vertices) {
-		app.strokeWeight(4);
-		app.noFill();
-		app.stroke(255);
-		app.beginShape();
+
 		// Look at each vertex
 		for (int i = 0; i < circle.size(); i++) {
 			PVector v1;
@@ -87,6 +84,10 @@ public class Shape {
 			// Lerp to the target
 			v2.lerp(v1, (float) 0.1);
 		}
+		app.strokeWeight(4);
+		app.beginShape();
+		app.noFill();
+		app.stroke(255);
 		for (PVector v : morph) {
 			app.vertex(v.x, v.y);
 		}
