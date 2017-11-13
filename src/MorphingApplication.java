@@ -35,17 +35,11 @@ public class MorphingApplication extends PApplet {
 		for (Body b : tracker.getPeople().values()) {
 			Shape s = shapes.get(b.getId());
 			if (s != null) {
-				strokeWeight(.1f);
-				noFill();
-				stroke(255);
-//				drawIfValid(b.getJoint(Body.HEAD));
 				s.update(b);
-				s.draw();
-//				// tested: one person
-//				if (numPeople == 1)
-//					s.draw(1);
-//				else if (numPeople == 2)
-//					s.draw(2);
+				if (numPeople == 1)
+					s.draw(1);
+				else if (numPeople == 2)
+					s.draw(2);
 			}
 
 		}

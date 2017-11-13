@@ -51,26 +51,10 @@ public class Shape {
 		}
 	}
 
-	public void draw() {
-		app.fill(255);
-		app.noStroke();
-		// drawIfValid(body.getJoint(Body.HEAD));
-		halfHeart(true);
-
-	}
-
-	public void drawIfValid(PVector vec) {
-		if (vec != null)
-			app.ellipse(vec.x, vec.y, .1f, .1f);
-
-	}
-
 	public void draw(int state) {
 		app.fill(255);
 		app.noStroke();
 
-		// draw relative to the center of this person
-		// app.translate(centerX, centerY);
 		switch (state) {
 		case -1:
 			halfHeart(true); // left heart
@@ -99,9 +83,35 @@ public class Shape {
 			v2.lerp(v1, (float) 0.1);
 		}
 		app.beginShape();
+		// draw relative to the center of this person
 		app.translate(centerX, centerY);
+		app.scale(.01f, .01f);
+		// app.translate(centerX, centerY);
 		for (PVector v : morph) {
 			app.vertex(v.x, v.y);
+		}
+		app.endShape(PApplet.CLOSE);
+	}
+
+	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
+	public void halfHeart(boolean isLeft) {
+		app.smooth();
+		// app.noStroke();
+		// app.fill(255);
+		// app.strokeWeight(.1f);
+
+		// tested: is drawing, but vertex might be too small
+		app.beginShape();
+		// draw relative to the center of this person
+		app.translate(centerX, centerY);
+		app.scale(.1f, .1f);
+		if (isLeft) {
+			System.out.println("c:" + centerX + " ; " + centerY);
+			app.vertex(50, 15);
+			app.bezierVertex(50, -5, 100, 5, 50, 40);
+		} else {
+			app.vertex(50, 15);
+			app.bezierVertex(50, -5, 0, 5, 50, 40);
 		}
 		app.endShape(PApplet.CLOSE);
 	}
@@ -122,22 +132,36 @@ public class Shape {
 	public void initSquare() {
 		// A square is a bunch of vertices along straight lines
 		// Top of square
-		for (int x = -50; x < 50; x += 10) {
-			square.add(new PVector(x, -50));
+		for (int x = -5; x < 5; x += 1) {
+			square.add(new PVector(x, -5));
 		}
 		// Right side
-		for (int y = -50; y < 50; y += 10) {
-			square.add(new PVector(50, y));
+		for (int y = -5; y < 5; y += 1) {
+			square.add(new PVector(5, y));
 		}
 		// Bottom
-		for (int x = 50; x > -50; x -= 10) {
-			square.add(new PVector(x, 50));
+		for (int x = 5; x > -5; x -= 1) {
+			square.add(new PVector(x, 5));
 		}
 		// Left side
-		for (int y = 50; y > -50; y -= 10) {
-			square.add(new PVector(-50, y));
+		for (int y = 5; y > -5; y -= 1) {
+			square.add(new PVector(-5, y));
 		}
 	}
+
+	// public void draw() {
+	// app.fill(255);
+	// app.noStroke();
+	// drawIfValid(new PVector(centerX, centerY));
+	// // halfHeart(true);
+	// morph(circle);
+	//
+	// }
+	//
+	// public void drawIfValid(PVector vec) {
+	// if (vec != null)
+	// app.ellipse(vec.x, vec.y, .1f, .1f);
+	// }
 
 	public void regPolygon(int npoints) {
 		float angle = PConstants.TWO_PI / npoints;
@@ -152,24 +176,6 @@ public class Shape {
 
 	public void initPentagon() {
 
-	}
-
-	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
-	public void halfHeart(boolean isLeft) {
-		// app.smooth();
-		// app.noStroke();
-		// app.fill(255);
-		// app.strokeWeight(.1f);
-		// tested: is drawing, but vertex might be too small
-		app.beginShape();
-		if (isLeft) {
-			app.vertex(50, 15);
-			app.bezierVertex(50, -5, 100, 5, 50, 40);
-		} else {
-			app.vertex(50, 15);
-			app.bezierVertex(50, -5, 0, 5, 50, 40);
-		}
-		app.endShape(PApplet.CLOSE);
 	}
 
 }
