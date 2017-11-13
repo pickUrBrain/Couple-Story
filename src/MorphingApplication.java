@@ -37,9 +37,9 @@ public class MorphingApplication extends PApplet {
 			if (s != null) {
 				s.update(b);
 				if (numPeople == 1)
-					s.draw(1);
-				else if (numPeople == 2)
 					s.draw(2);
+				else if (numPeople >= 2)
+					s.draw(1);
 			}
 
 		}

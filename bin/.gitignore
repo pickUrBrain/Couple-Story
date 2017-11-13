@@ -1,2 +1,15 @@
-/Person.class
+/Body.class
+/KinectBodyData.class
+/KinectBodyDataProvider.class
+/KinectRenderDemo.class
+/MorphingApplication.class
+/Msg.class
+/MsgProvider.class
+/MultiUserAppDemo.class
+/PersonTracker.class
+/ProjectorProportionsApp.class
+/Quat.class
 /Shape.class
+/UDPPlayer.class
+/UDPReceiver.class
+/UDPRecorder.class

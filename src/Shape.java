@@ -122,7 +122,7 @@ public class Shape {
 			// Note we are not starting from 0 in order to match the
 			// path of a circle.
 			PVector v = PVector.fromAngle(PApplet.radians(angle - 135));
-			v.mult(100);
+			v.mult(30);
 			circle.add(v);
 			// Let's fill out morph ArrayList with blank PVectors while we are at it
 			morph.add(new PVector());
