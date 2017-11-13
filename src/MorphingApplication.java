@@ -18,9 +18,8 @@ public class MorphingApplication extends PApplet {
 
 	public void draw() {
 		setScale(.5f);
-		noStroke();
-		background(200, 200, 200);
-		fill(255, 0, 0);
+		colorMode(PApplet.HSB);
+		background(173);
 
 		KinectBodyData bodyData = kinectReader.getData();
 		tracker.update(bodyData);
@@ -36,11 +35,17 @@ public class MorphingApplication extends PApplet {
 		for (Body b : tracker.getPeople().values()) {
 			Shape s = shapes.get(b.getId());
 			if (s != null) {
+				strokeWeight(.1f);
+				noFill();
+				stroke(255);
+//				drawIfValid(b.getJoint(Body.HEAD));
 				s.update(b);
-				if (numPeople == 1)
-					s.draw(1);
-				else if (numPeople == 2)
-					s.draw(2);
+				s.draw();
+//				// tested: one person
+//				if (numPeople == 1)
+//					s.draw(1);
+//				else if (numPeople == 2)
+//					s.draw(2);
 			}
 
 		}

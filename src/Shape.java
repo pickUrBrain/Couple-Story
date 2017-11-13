@@ -12,7 +12,6 @@ public class Shape {
 
 	Body body;
 	PApplet app;
-
 	int color;
 
 	float centerX;
@@ -35,7 +34,6 @@ public class Shape {
 	public Shape(PApplet app) {
 		this.app = app;
 
-		app.colorMode(PApplet.HSB);
 		// color = app.color(app.random(255), 255, 255);
 		initCircle();
 		initSquare();
@@ -53,9 +51,26 @@ public class Shape {
 		}
 	}
 
+	public void draw() {
+		app.fill(255);
+		app.noStroke();
+		// drawIfValid(body.getJoint(Body.HEAD));
+		halfHeart(true);
+
+	}
+
+	public void drawIfValid(PVector vec) {
+		if (vec != null)
+			app.ellipse(vec.x, vec.y, .1f, .1f);
+
+	}
+
 	public void draw(int state) {
+		app.fill(255);
+		app.noStroke();
+
 		// draw relative to the center of this person
-		app.translate(centerX, centerY);
+		// app.translate(centerX, centerY);
 		switch (state) {
 		case -1:
 			halfHeart(true); // left heart
@@ -74,7 +89,6 @@ public class Shape {
 
 	// tested: is being called
 	public void morph(ArrayList<PVector> vertices) {
-
 		// Look at each vertex
 		for (int i = 0; i < circle.size(); i++) {
 			PVector v1;
@@ -84,10 +98,8 @@ public class Shape {
 			// Lerp to the target
 			v2.lerp(v1, (float) 0.1);
 		}
-		app.strokeWeight(4);
 		app.beginShape();
-		app.noFill();
-		app.stroke(255);
+		app.translate(centerX, centerY);
 		for (PVector v : morph) {
 			app.vertex(v.x, v.y);
 		}
@@ -144,11 +156,11 @@ public class Shape {
 
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
 	public void halfHeart(boolean isLeft) {
-		app.smooth();
-		app.noStroke();
-
-		app.fill(255, 0, 0);
-
+		// app.smooth();
+		// app.noStroke();
+		// app.fill(255);
+		// app.strokeWeight(.1f);
+		// tested: is drawing, but vertex might be too small
 		app.beginShape();
 		if (isLeft) {
 			app.vertex(50, 15);
@@ -157,7 +169,7 @@ public class Shape {
 			app.vertex(50, 15);
 			app.bezierVertex(50, -5, 0, 5, 50, 40);
 		}
-		app.endShape();
+		app.endShape(PApplet.CLOSE);
 	}
 
 }
