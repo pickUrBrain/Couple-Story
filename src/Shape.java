@@ -20,6 +20,9 @@ public class Shape {
 	PVector head;
 	PVector spineBase;
 
+	boolean morphing = false;
+	boolean isSquare = true;
+
 	// float angle = 0;
 	// float aVelocity = 0;
 	// float aAcceleration = 0;
@@ -29,6 +32,7 @@ public class Shape {
 	// number of vertices, i.e. the size of each ArrayList will be the same
 	ArrayList<PVector> circle = new ArrayList<PVector>();
 	ArrayList<PVector> square = new ArrayList<PVector>();
+
 	ArrayList<PVector> morph = new ArrayList<PVector>();
 
 	public Shape(PApplet app) {
@@ -39,8 +43,9 @@ public class Shape {
 		initSquare();
 	}
 
-	public void update(Body body) {
+	public void update(Body body, boolean morphing, boolean isSquare) {
 		this.body = body;
+		this.morphing = morphing;
 		head = body.getJoint(Body.HEAD);
 		spineBase = body.getJoint(Body.SPINE_BASE);
 		if (head != null && spineBase != null) {
@@ -49,6 +54,36 @@ public class Shape {
 			// the Euclidean distance between two points
 			rad = Math.abs(head.dist(spineBase)) / 2f;
 		}
+	}
+
+	public void draw() {
+		
+		if (morphing) {
+			// Look at each vertex
+			for (int i = 0; i < circle.size(); i++) {
+				PVector v1 = null;
+				// Are we lerping to the circle or square?
+				if (!isSquare) {
+					v1 = circle.get(i);
+				} else {
+					v1 = square.get(i);
+				}
+				// Get the vertex we will draw
+				PVector v2 = morph.get(i);
+				// Lerp to the target
+				v2.lerp(v1, (float) 0.1);
+			}
+		}
+		app.beginShape();
+		// draw relative to the center of this person
+		app.translate(centerX, centerY);
+		app.scale(.01f, .01f);
+		// app.translate(centerX, centerY);
+		for (PVector v : morph) {
+			app.vertex(v.x, v.y);
+		}
+		app.endShape(PApplet.CLOSE);
+
 	}
 
 	public void draw(int state) {
@@ -65,9 +100,11 @@ public class Shape {
 		case 1:
 			morph(circle);
 			break;
-		default:
+		case 2:
 			morph(square);
 			break;
+		default:
+
 		}
 	}
 
