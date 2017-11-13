@@ -10,9 +10,6 @@ import processing.core.PVector;
  */
 public class Shape {
 
-	// This boolean variable will control if we are morphing to a circle or square
-	boolean isSquare = false;
-
 	Body body;
 	PApplet app;
 
@@ -44,6 +41,18 @@ public class Shape {
 		initSquare();
 	}
 
+	public void update(Body body) {
+		this.body = body;
+		head = body.getJoint(Body.HEAD);
+		spineBase = body.getJoint(Body.SPINE_BASE);
+		if (head != null && spineBase != null) {
+			centerX = spineBase.x;
+			centerY = spineBase.y;
+			// the Euclidean distance between two points
+			rad = Math.abs(head.dist(spineBase)) / 2f;
+		}
+	}
+
 	public void draw(int state) {
 		// draw relative to the center of this person
 		app.translate(centerX, centerY);
@@ -63,6 +72,7 @@ public class Shape {
 		}
 	}
 
+	// tested: is being called
 	public void morph(ArrayList<PVector> vertices) {
 		app.strokeWeight(4);
 		app.noFill();
@@ -81,17 +91,6 @@ public class Shape {
 			app.vertex(v.x, v.y);
 		}
 		app.endShape(PApplet.CLOSE);
-	}
-
-	public void update(Body body, boolean isSquare) {
-		this.body = body;
-		head = body.getJoint(Body.HEAD);
-		spineBase = body.getJoint(Body.SPINE_BASE);
-		centerX = spineBase.x;
-		centerY = spineBase.y;
-		// the Euclidean distance between two points
-		rad = Math.abs(head.dist(spineBase)) / 2f;
-		this.isSquare = isSquare;
 	}
 
 	public void initCircle() {
