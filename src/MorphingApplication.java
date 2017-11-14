@@ -13,6 +13,10 @@ public class MorphingApplication extends PApplet {
 	KinectBodyDataProvider kinectReader;
 
 	PersonTracker tracker = new PersonTracker();
+	
+	boolean isMorph = false;
+	
+	boolean isSquare = true;
 
 	public static float PROJECTOR_RATIO = 1080f / 1920.0f;
 
@@ -23,6 +27,7 @@ public class MorphingApplication extends PApplet {
 
 		KinectBodyData bodyData = kinectReader.getData();
 		tracker.update(bodyData);
+		isMorph = tracker.getMorph();
 
 		for (Long id : tracker.getEnters()) {
 			shapes.put(id, new Shape(this));
@@ -32,14 +37,22 @@ public class MorphingApplication extends PApplet {
 		}
 
 		int numPeople = shapes.size(); // tested: detects correct count of people
+		if (numPeople == 2) isSquare = false;
 		for (Body b : tracker.getPeople().values()) {
 			Shape s = shapes.get(b.getId());
 			if (s != null) {
-				s.update(b);
-				if (numPeople == 1)
+				s.update(b, isMorph, isSquare); //if there's any changes in number of ppl, change morph true
+				//if there's two people, change isSquare to false
+				System.out.println("body: "+ b.getId()+ "morph: " + isMorph + "is square" + isSquare);
+				
+				if (numPeople == 1){
+					System.out.println("num p: 1");
 					s.draw(2);
-				else if (numPeople >= 2)
+				}
+				else if (numPeople >= 2){
+					System.out.println("num p: 2");
 					s.draw(1);
+				}
 			}
 
 		}

@@ -17,6 +17,7 @@ public class PersonTracker {
 	protected HashSet<Long> exits = new HashSet<Long>();
 	private HashMap<Long, Body> peopleOld = new HashMap<Long, Body>(); // keep this for reuse
 	protected HashMap<Long, Body> people = new HashMap<Long, Body>();
+	private boolean isMorph = true;
 
 	public PersonTracker() {
 
@@ -86,13 +87,25 @@ public class PersonTracker {
 		exits.clear();
 		exits.addAll(peopleOld.keySet());
 		exits.removeAll(people.keySet());
+		
+		if (enters.isEmpty() && exits.isEmpty()){
+			isMorph = false;
+		}
 
 		for (Long l : enters) {
+			isMorph = true;
 			System.out.println("enter:" + l);
 		}
 		for (Long l : exits) {
+			isMorph = true;
 			System.out.println(" exit:" + l);
 		}
+	}
+	
+	//detect if there's any updates
+	public boolean getMorph(){
+		
+		return isMorph;
 	}
 
 }
