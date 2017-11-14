@@ -37,7 +37,9 @@ public class MorphingApplication extends PApplet {
 		}
 
 		int numPeople = shapes.size(); // tested: detects correct count of people
-		if (numPeople == 2) isSquare = false;
+		if (numPeople >= 2) isSquare = false;
+		else if (numPeople == 1) isSquare = true;
+		
 		for (Body b : tracker.getPeople().values()) {
 			Shape s = shapes.get(b.getId());
 			if (s != null) {
@@ -109,6 +111,11 @@ public class MorphingApplication extends PApplet {
 	public void setScale(float zoom) {
 		scale(zoom * width / 2.0f, zoom * -width / 2.0f);
 		translate(1f / zoom, -PROJECTOR_RATIO / zoom);
+	}
+	
+	public boolean isClose(PVector p1, PVector p2){
+		
+		return false;
 	}
 
 }
