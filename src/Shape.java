@@ -58,23 +58,23 @@ public class Shape {
 		}
 	}
 
-	public void draw(int state) {
+	public void draw(int state, Color color) {
 		// halfHeart(true);
 		switch (state) {
 		case -1:
-			//app.fill(color.getRGB());
+			app.fill(color.getRGB());
 			halfHeart(true); // left heart
 			break;
 		case 0:
-			//app.fill(color.getRGB());
+			app.fill(color.getRGB());
 			halfHeart(false); // right heart
 			break;
 		case 1:
-			//app.fill(color.getRGB());
+			app.fill(color.getRGB());
 			morph(crclSet);
 			break;
 		case 2:
-			//app.fill(color.getRGB());
+			app.fill(color.getRGB());
 			morph(sqrSet);
 			break;
 		default:
@@ -92,7 +92,7 @@ public class Shape {
 			// Lerp to the target
 			v2.lerp(v1, (float) 0.05);
 		}
-		app.fill(255);
+		//app.fill(255);
 		app.noStroke();
 		app.pushMatrix();
 		// shape that represents the new enter
@@ -137,7 +137,7 @@ public class Shape {
 
 	public void statusQuo() {
 		if (isSquare) {
-			app.fill(255);
+			//app.fill(255);
 			app.noStroke();
 			app.pushMatrix();
 			// shape that represents the new enter
@@ -154,7 +154,7 @@ public class Shape {
 			app.shape(s);
 			app.popMatrix();
 		} else {
-			app.fill(255);
+			//app.fill(255);
 			app.noStroke();
 			app.pushMatrix();
 			// shape that represents the new enter

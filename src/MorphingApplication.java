@@ -6,9 +6,6 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 public class MorphingApplication extends PApplet {
-	
-	public static enum COLOR_STATE {BLUE, PINK, PURPLE};
-	public COLOR_STATE colorState = COLOR_STATE.PURPLE;
 
 	int count = 0; // count of people
 
@@ -51,28 +48,20 @@ public class MorphingApplication extends PApplet {
 				s.update(b, isMorph, isSquare); //if there's any changes in number of ppl, change morph true
 				//if there's two people, change isSquare to false
 				System.out.println("body: "+ b.getId()+ "morph: " + isMorph + "is square" + isSquare);
-//				s.draw();
+
 				if (numPeople == 1){
 					System.out.println("num p: 1");
-					//colorState = COLOR_STATE.BLUE;
-					s.draw(2);
+					s.draw(2, new Color(0, 0, 255));
 					
 				}
 				else if (numPeople >= 2){
 					System.out.println("num p: 2");
-					//colorState = COLOR_STATE.PINK;
-					s.draw(1);
+					s.draw(1, new Color(232, 64, 170));
 				}
 			}
 
 		}
 	}
-
-//	public void drawIfValid(PVector vec) {
-//		if (vec != null) {
-//			ellipse(vec.x, vec.y, .1f, .1f);
-//		}
-//	}
 
 	public static void main(String[] args) {
 		PApplet.main(MorphingApplication.class.getName());
