@@ -58,80 +58,28 @@ public class Shape {
 		}
 	}
 
-<<<<<<< HEAD
-	public void draw() {
-		
-		//fill the color
-		//app.fill();
-		app.noStroke();
-		
-		if (morphing) {
-			// Look at each vertex
-			for (int i = 0; i < circle.size(); i++) {
-				PVector v1 = null;
-				// Are we lerping to the circle or square?
-				if (!isSquare) {
-					v1 = circle.get(i);
-				} else {
-					v1 = square.get(i);
-				}
-				// Get the vertex we will draw
-				PVector v2 = morph.get(i);
-				// Lerp to the target
-				v2.lerp(v1, (float) 0.1);
-			}
-		}
-
-		PShape s = app.createShape();
-		s.beginShape();
-		// draw relative to the center of this person
-		s.translate(centerX, centerY);
-		s.scale(.1f, .1f);
-		for (PVector v : morph) {
-			s.vertex(v.x, v.y);
-		}
-		s.endShape(PApplet.CLOSE);
-		app.shape(s);
-
-	}
-
-	public void draw(int state, Color color) {
-		//app.fill(255);
-
-=======
 	public void draw(int state) {
 		// halfHeart(true);
->>>>>>> origin/master
 		switch (state) {
 		case -1:
-			app.fill(color.getRGB());
+			//app.fill(color.getRGB());
 			halfHeart(true); // left heart
 			break;
 		case 0:
-			app.fill(color.getRGB());
+			//app.fill(color.getRGB());
 			halfHeart(false); // right heart
 			break;
 		case 1:
-<<<<<<< HEAD
-			app.fill(color.getRGB());
-			morph(circle);
-			break;
-		case 2:
-			app.fill(color.getRGB());
-			morph(square);
-=======
+			//app.fill(color.getRGB());
 			morph(crclSet);
 			break;
 		case 2:
+			//app.fill(color.getRGB());
 			morph(sqrSet);
->>>>>>> origin/master
 			break;
 		default:
 
 		}
-		
-
-		app.noStroke();
 	}
 
 	public void morph(ArrayList<PVector> vertices) {
