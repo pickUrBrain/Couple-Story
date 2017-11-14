@@ -42,6 +42,7 @@ public class MorphingApplication extends PApplet {
 		
 		for (Body b : tracker.getPeople().values()) {
 			Shape s = shapes.get(b.getId());
+			System.out.println("shape ids: " + b.getId());
 			if (s != null) {
 				s.update(b, isMorph, isSquare); //if there's any changes in number of ppl, change morph true
 				//if there's two people, change isSquare to false
