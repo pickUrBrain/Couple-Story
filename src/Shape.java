@@ -31,10 +31,10 @@ public class Shape {
 	// Two ArrayLists to store the vertices for two shapes
 	// This example assumes that each shape will have the same
 	// number of vertices, i.e. the size of each ArrayList will be the same
-	ArrayList<PVector> circle = new ArrayList<PVector>();
-	ArrayList<PVector> square = new ArrayList<PVector>();
+	ArrayList<PVector> crclSet = new ArrayList<PVector>();
+	ArrayList<PVector> sqrSet = new ArrayList<PVector>();
 
-	ArrayList<PVector> morph = new ArrayList<PVector>();
+	ArrayList<PVector> morphSet = new ArrayList<PVector>();
 
 	public Shape(PApplet app) {
 		this.app = app;
@@ -67,10 +67,10 @@ public class Shape {
 			halfHeart(false); // right heart
 			break;
 		case 1:
-			morph(circle);
+			morph(crclSet);
 			break;
 		case 2:
-			morph(square);
+			morph(sqrSet);
 			break;
 		default:
 
@@ -79,11 +79,11 @@ public class Shape {
 
 	public void morph(ArrayList<PVector> vertices) {
 		// Look at each vertex
-		for (int i = 0; i < circle.size(); i++) {
+		for (int i = 0; i < crclSet.size(); i++) {
 			PVector v1;
 			v1 = vertices.get(i);
 			// Get the vertex we will draw
-			PVector v2 = morph.get(i);
+			PVector v2 = morphSet.get(i);
 			// Lerp to the target
 			v2.lerp(v1, (float) 0.05);
 		}
@@ -97,13 +97,12 @@ public class Shape {
 		s.beginShape();
 		s.scale(.01f, .01f);
 		// shape drawing
-		for (PVector v : morph)
+		for (PVector v : morphSet)
 			s.vertex(v.x, v.y);
 		s.endShape(PApplet.CLOSE);
 		// create this shape in its parent pApplet
 		app.shape(s);
 		app.popMatrix();
-
 	}
 
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
@@ -131,6 +130,45 @@ public class Shape {
 		app.popMatrix();
 	}
 
+	public void statusQuo() {
+		if (isSquare) {
+			app.fill(255);
+			app.noStroke();
+			app.pushMatrix();
+			// shape that represents the new enter
+			PShape s = app.createShape();
+			// draw relative to the center of this person
+			app.translate(centerX, centerY);
+			s.beginShape();
+			s.scale(.01f, .01f);
+			// shape drawing
+			for (PVector v : sqrSet)
+				s.vertex(v.x, v.y);
+			s.endShape(PApplet.CLOSE);
+			// create this shape in its parent pApplet
+			app.shape(s);
+			app.popMatrix();
+		} else {
+			app.fill(255);
+			app.noStroke();
+			app.pushMatrix();
+			// shape that represents the new enter
+			PShape s = app.createShape();
+			// draw relative to the center of this person
+			app.translate(centerX, centerY);
+			s.beginShape();
+			s.scale(.01f, .01f);
+			// shape drawing
+			for (PVector v : crclSet)
+				s.vertex(v.x, v.y);
+			s.endShape(PApplet.CLOSE);
+			// create this shape in its parent pApplet
+			app.shape(s);
+			app.popMatrix();
+		}
+
+	}
+
 	/**
 	 * Creates a circle using vectors pointing from center
 	 */
@@ -140,9 +178,9 @@ public class Shape {
 			// path of a circle.
 			PVector v = PVector.fromAngle(PApplet.radians(angle - 135));
 			v.mult(15);
-			circle.add(v);
+			crclSet.add(v);
 			// fill out morph ArrayList with blank PVectors
-			morph.add(new PVector());
+			morphSet.add(new PVector());
 		}
 	}
 
@@ -152,16 +190,16 @@ public class Shape {
 	public void initSquare() {
 		// Top of square
 		for (int x = -20; x < 20; x += 4)
-			square.add(new PVector(x, -20));
+			sqrSet.add(new PVector(x, -20));
 		// Right side
 		for (int y = -20; y < 20; y += 4)
-			square.add(new PVector(20, y));
+			sqrSet.add(new PVector(20, y));
 		// Bottom
 		for (int x = 20; x > -20; x -= 4)
-			square.add(new PVector(x, 20));
+			sqrSet.add(new PVector(x, 20));
 		// Left side
 		for (int y = 20; y > -20; y -= 4)
-			square.add(new PVector(-20, y));
+			sqrSet.add(new PVector(-20, y));
 	}
 
 	public void regPolygon(int npoints) {
