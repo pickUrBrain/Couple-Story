@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -13,7 +14,6 @@ public class Shape {
 
 	Body body;
 	PApplet app;
-	int color;
 
 	float centerX;
 	float centerY;
@@ -38,8 +38,9 @@ public class Shape {
 
 	public Shape(PApplet app) {
 		this.app = app;
+		//app.fill(color.getRGB());
 
-		// color = app.color(app.random(255), 255, 255);
+		//app.colorMode(PApplet.HSB);
 		initCircle();
 		initSquare();
 	}
@@ -58,6 +59,11 @@ public class Shape {
 	}
 
 	public void draw() {
+		
+		//fill the color
+		//app.fill();
+		app.noStroke();
+		
 		if (morphing) {
 			// Look at each vertex
 			for (int i = 0; i < circle.size(); i++) {
@@ -88,26 +94,32 @@ public class Shape {
 
 	}
 
-	public void draw(int state) {
-		app.fill(255);
-		app.noStroke();
+	public void draw(int state, Color color) {
+		//app.fill(255);
 
 		switch (state) {
 		case -1:
+			app.fill(color.getRGB());
 			halfHeart(true); // left heart
 			break;
 		case 0:
+			app.fill(color.getRGB());
 			halfHeart(false); // right heart
 			break;
 		case 1:
+			app.fill(color.getRGB());
 			morph(circle);
 			break;
 		case 2:
+			app.fill(color.getRGB());
 			morph(square);
 			break;
 		default:
 
 		}
+		
+
+		app.noStroke();
 	}
 
 	// tested: is being called
@@ -191,20 +203,6 @@ public class Shape {
 			square.add(new PVector(-5, y));
 		}
 	}
-
-	// public void draw() {
-	// app.fill(255);
-	// app.noStroke();
-	// drawIfValid(new PVector(centerX, centerY));
-	// // halfHeart(true);
-	// morph(circle);
-	//
-	// }
-	//
-	// public void drawIfValid(PVector vec) {
-	// if (vec != null)
-	// app.ellipse(vec.x, vec.y, .1f, .1f);
-	// }
 
 	public void regPolygon(int npoints) {
 		float angle = PConstants.TWO_PI / npoints;

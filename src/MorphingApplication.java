@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -5,6 +6,10 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 public class MorphingApplication extends PApplet {
+	
+	public static enum COLOR_STATE {BLUE, PINK, PURPLE};
+	public COLOR_STATE colorState = COLOR_STATE.PURPLE;
+	int color;
 
 	int count = 0; // count of people
 
@@ -22,8 +27,20 @@ public class MorphingApplication extends PApplet {
 
 	public void draw() {
 		setScale(.5f);
-		colorMode(PApplet.HSB);
-		background(173);
+//		colorMode(PApplet.HSB);
+//		background(173);
+		
+//		switch (colorState){
+//		case BLUE:
+//			color = color(0, 0, 255);
+//			break;
+//		case PINK:
+//			color = color(232, 64, 170);
+//			break;
+//		default: //purple
+//			color = color(150, 0, 205);
+//		}
+			
 
 		KinectBodyData bodyData = kinectReader.getData();
 		tracker.update(bodyData);
@@ -50,11 +67,14 @@ public class MorphingApplication extends PApplet {
 //				s.draw();
 				if (numPeople == 1){
 					System.out.println("num p: 1");
-					s.draw(2);
+					//colorState = COLOR_STATE.BLUE;
+					s.draw(2, new Color(0, 0, 255));
+					
 				}
 				else if (numPeople >= 2){
 					System.out.println("num p: 2");
-					s.draw(1);
+					//colorState = COLOR_STATE.PINK;
+					s.draw(1, new Color(232, 64, 170));
 				}
 			}
 
