@@ -31,10 +31,10 @@ public class Shape {
 	// Two ArrayLists to store the vertices for two shapes
 	// This example assumes that each shape will have the same
 	// number of vertices, i.e. the size of each ArrayList will be the same
-	ArrayList<PVector> circle = new ArrayList<PVector>();
-	ArrayList<PVector> square = new ArrayList<PVector>();
+	ArrayList<PVector> crclSet = new ArrayList<PVector>();
+	ArrayList<PVector> sqrSet = new ArrayList<PVector>();
 
-	ArrayList<PVector> morph = new ArrayList<PVector>();
+	ArrayList<PVector> morphSet = new ArrayList<PVector>();
 
 	public Shape(PApplet app) {
 		this.app = app;
@@ -58,6 +58,7 @@ public class Shape {
 		}
 	}
 
+<<<<<<< HEAD
 	public void draw() {
 		
 		//fill the color
@@ -97,6 +98,10 @@ public class Shape {
 	public void draw(int state, Color color) {
 		//app.fill(255);
 
+=======
+	public void draw(int state) {
+		// halfHeart(true);
+>>>>>>> origin/master
 		switch (state) {
 		case -1:
 			app.fill(color.getRGB());
@@ -107,12 +112,19 @@ public class Shape {
 			halfHeart(false); // right heart
 			break;
 		case 1:
+<<<<<<< HEAD
 			app.fill(color.getRGB());
 			morph(circle);
 			break;
 		case 2:
 			app.fill(color.getRGB());
 			morph(square);
+=======
+			morph(crclSet);
+			break;
+		case 2:
+			morph(sqrSet);
+>>>>>>> origin/master
 			break;
 		default:
 
@@ -122,86 +134,129 @@ public class Shape {
 		app.noStroke();
 	}
 
-	// tested: is being called
 	public void morph(ArrayList<PVector> vertices) {
 		// Look at each vertex
-		for (int i = 0; i < circle.size(); i++) {
+		for (int i = 0; i < crclSet.size(); i++) {
 			PVector v1;
 			v1 = vertices.get(i);
 			// Get the vertex we will draw
-			PVector v2 = morph.get(i);
+			PVector v2 = morphSet.get(i);
 			// Lerp to the target
-			v2.lerp(v1, (float) 0.1);
+			v2.lerp(v1, (float) 0.05);
 		}
+		app.fill(255);
+		app.noStroke();
+		app.pushMatrix();
+		// shape that represents the new enter
 		PShape s = app.createShape();
+		// draw relative to the center of this person
 		app.translate(centerX, centerY);
 		s.beginShape();
-		s.translate(centerX, centerY);
-		// draw relative to the center of this person
 		s.scale(.01f, .01f);
-		// app.translate(centerX, centerY);
-		for (PVector v : morph) {
+		// shape drawing
+		for (PVector v : morphSet)
 			s.vertex(v.x, v.y);
-		}
 		s.endShape(PApplet.CLOSE);
+		// create this shape in its parent pApplet
 		app.shape(s);
+		app.popMatrix();
 	}
 
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
 	public void halfHeart(boolean isLeft) {
 		app.smooth();
-		// app.noStroke();
-		// app.fill(255);
-		// app.strokeWeight(.1f);
-
-		// tested: is drawing, but vertex might be too small
-		app.beginShape();
+		app.fill(255);
+		app.strokeWeight(1f);
+		app.pushMatrix();
+		// shape that represents the new enter
+		PShape s = app.createShape();
 		// draw relative to the center of this person
 		app.translate(centerX, centerY);
-		app.scale(.1f, .1f);
+		s.beginShape();
+		s.scale(.01f, .01f);
 		if (isLeft) {
-			System.out.println("c:" + centerX + " ; " + centerY);
-			app.vertex(50, 15);
-			app.bezierVertex(50, -5, 100, 5, 50, 40);
+			s.vertex(50, 15);
+			s.bezierVertex(50, -5, 100, 5, 50, 40);
 		} else {
-			app.vertex(50, 15);
-			app.bezierVertex(50, -5, 0, 5, 50, 40);
+			s.vertex(50, 15);
+			s.bezierVertex(50, -5, 0, 5, 50, 40);
 		}
-		app.endShape(PApplet.CLOSE);
+		s.endShape(PApplet.CLOSE);
+		// create this shape in its parent pApplet
+		app.shape(s);
+		app.popMatrix();
 	}
 
+	public void statusQuo() {
+		if (isSquare) {
+			app.fill(255);
+			app.noStroke();
+			app.pushMatrix();
+			// shape that represents the new enter
+			PShape s = app.createShape();
+			// draw relative to the center of this person
+			app.translate(centerX, centerY);
+			s.beginShape();
+			s.scale(.01f, .01f);
+			// shape drawing
+			for (PVector v : sqrSet)
+				s.vertex(v.x, v.y);
+			s.endShape(PApplet.CLOSE);
+			// create this shape in its parent pApplet
+			app.shape(s);
+			app.popMatrix();
+		} else {
+			app.fill(255);
+			app.noStroke();
+			app.pushMatrix();
+			// shape that represents the new enter
+			PShape s = app.createShape();
+			// draw relative to the center of this person
+			app.translate(centerX, centerY);
+			s.beginShape();
+			s.scale(.01f, .01f);
+			// shape drawing
+			for (PVector v : crclSet)
+				s.vertex(v.x, v.y);
+			s.endShape(PApplet.CLOSE);
+			// create this shape in its parent pApplet
+			app.shape(s);
+			app.popMatrix();
+		}
+
+	}
+
+	/**
+	 * Creates a circle using vectors pointing from center
+	 */
 	public void initCircle() {
-		// Create a circle using vectors pointing from center
 		for (int angle = 0; angle < 360; angle += 9) {
 			// Note we are not starting from 0 in order to match the
 			// path of a circle.
 			PVector v = PVector.fromAngle(PApplet.radians(angle - 135));
 			v.mult(15);
-			circle.add(v);
-			// Let's fill out morph ArrayList with blank PVectors while we are at it
-			morph.add(new PVector());
+			crclSet.add(v);
+			// fill out morph ArrayList with blank PVectors
+			morphSet.add(new PVector());
 		}
 	}
 
-	// MAKE THE SQUARE BIGGER THAN THE CIRCLE!!!!!
+	/**
+	 * Creates a square by using a bunch of vertices along straight lines
+	 */
 	public void initSquare() {
-		// A square is a bunch of vertices along straight lines
 		// Top of square
-		for (int x = -5; x < 5; x += 1) {
-			square.add(new PVector(x, -5));
-		}
+		for (int x = -20; x < 20; x += 4)
+			sqrSet.add(new PVector(x, -20));
 		// Right side
-		for (int y = -5; y < 5; y += 1) {
-			square.add(new PVector(5, y));
-		}
+		for (int y = -20; y < 20; y += 4)
+			sqrSet.add(new PVector(20, y));
 		// Bottom
-		for (int x = 5; x > -5; x -= 1) {
-			square.add(new PVector(x, 5));
-		}
+		for (int x = 20; x > -20; x -= 4)
+			sqrSet.add(new PVector(x, 20));
 		// Left side
-		for (int y = 5; y > -5; y -= 1) {
-			square.add(new PVector(-5, y));
-		}
+		for (int y = 20; y > -20; y -= 4)
+			sqrSet.add(new PVector(-20, y));
 	}
 
 	public void regPolygon(int npoints) {
@@ -213,10 +268,6 @@ public class Shape {
 			app.vertex(sx, sy);
 		}
 		app.endShape(PConstants.CLOSE);
-	}
-
-	public void initPentagon() {
-
 	}
 
 }
