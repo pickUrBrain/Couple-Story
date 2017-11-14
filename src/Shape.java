@@ -58,9 +58,7 @@ public class Shape {
 	}
 
 	public void draw(int state) {
-		app.fill(255);
-		app.noStroke();
-
+		// halfHeart(true);
 		switch (state) {
 		case -1:
 			halfHeart(true); // left heart
@@ -89,6 +87,8 @@ public class Shape {
 			// Lerp to the target
 			v2.lerp(v1, (float) 0.05);
 		}
+		app.fill(255);
+		app.noStroke();
 		app.pushMatrix();
 		// shape that represents the new enter
 		PShape s = app.createShape();
@@ -96,12 +96,11 @@ public class Shape {
 		app.translate(centerX, centerY);
 		s.beginShape();
 		s.scale(.01f, .01f);
-		// app.translate(centerX, centerY); // looks like it doesn't matter to be within
 		// shape drawing
 		for (PVector v : morph)
 			s.vertex(v.x, v.y);
 		s.endShape(PApplet.CLOSE);
-		// create this shape in its parent papplet
+		// create this shape in its parent pApplet
 		app.shape(s);
 		app.popMatrix();
 
@@ -110,58 +109,59 @@ public class Shape {
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
 	public void halfHeart(boolean isLeft) {
 		app.smooth();
-		// app.noStroke();
-		// app.fill(255);
-		// app.strokeWeight(.1f);
-
-		// tested: is drawing, but vertex might be too small
-		app.beginShape();
+		app.fill(255);
+		app.strokeWeight(1f);
+		app.pushMatrix();
+		// shape that represents the new enter
+		PShape s = app.createShape();
 		// draw relative to the center of this person
 		app.translate(centerX, centerY);
-		app.scale(.1f, .1f);
+		s.beginShape();
+		s.scale(.01f, .01f);
 		if (isLeft) {
-			System.out.println("c:" + centerX + " ; " + centerY);
-			app.vertex(50, 15);
-			app.bezierVertex(50, -5, 100, 5, 50, 40);
+			s.vertex(50, 15);
+			s.bezierVertex(50, -5, 100, 5, 50, 40);
 		} else {
-			app.vertex(50, 15);
-			app.bezierVertex(50, -5, 0, 5, 50, 40);
+			s.vertex(50, 15);
+			s.bezierVertex(50, -5, 0, 5, 50, 40);
 		}
-		app.endShape(PApplet.CLOSE);
+		s.endShape(PApplet.CLOSE);
+		// create this shape in its parent pApplet
+		app.shape(s);
+		app.popMatrix();
 	}
 
+	/**
+	 * Creates a circle using vectors pointing from center
+	 */
 	public void initCircle() {
-		// Create a circle using vectors pointing from center
 		for (int angle = 0; angle < 360; angle += 9) {
 			// Note we are not starting from 0 in order to match the
 			// path of a circle.
 			PVector v = PVector.fromAngle(PApplet.radians(angle - 135));
 			v.mult(15);
 			circle.add(v);
-			// Let's fill out morph ArrayList with blank PVectors while we are at it
+			// fill out morph ArrayList with blank PVectors
 			morph.add(new PVector());
 		}
 	}
 
-	// MAKE THE SQUARE BIGGER THAN THE CIRCLE!!!!!
+	/**
+	 * Creates a square by using a bunch of vertices along straight lines
+	 */
 	public void initSquare() {
-		// A square is a bunch of vertices along straight lines
 		// Top of square
-		for (int x = -5; x < 5; x += 1) {
-			square.add(new PVector(x, -5));
-		}
+		for (int x = -20; x < 20; x += 4)
+			square.add(new PVector(x, -20));
 		// Right side
-		for (int y = -5; y < 5; y += 1) {
-			square.add(new PVector(5, y));
-		}
+		for (int y = -20; y < 20; y += 4)
+			square.add(new PVector(20, y));
 		// Bottom
-		for (int x = 5; x > -5; x -= 1) {
-			square.add(new PVector(x, 5));
-		}
+		for (int x = 20; x > -20; x -= 4)
+			square.add(new PVector(x, 20));
 		// Left side
-		for (int y = 5; y > -5; y -= 1) {
-			square.add(new PVector(-5, y));
-		}
+		for (int y = 20; y > -20; y -= 4)
+			square.add(new PVector(-20, y));
 	}
 
 	public void regPolygon(int npoints) {
@@ -173,10 +173,6 @@ public class Shape {
 			app.vertex(sx, sy);
 		}
 		app.endShape(PConstants.CLOSE);
-	}
-
-	public void initPentagon() {
-
 	}
 
 }
