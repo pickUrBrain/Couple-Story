@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PShape;
 import processing.core.PVector;
 
 /**
@@ -57,6 +58,33 @@ public class Shape {
 	}
 
 	public void draw() {
+		if (morphing) {
+			// Look at each vertex
+			for (int i = 0; i < circle.size(); i++) {
+				PVector v1 = null;
+				// Are we lerping to the circle or square?
+				if (!isSquare) {
+					v1 = circle.get(i);
+				} else {
+					v1 = square.get(i);
+				}
+				// Get the vertex we will draw
+				PVector v2 = morph.get(i);
+				// Lerp to the target
+				v2.lerp(v1, (float) 0.1);
+			}
+		}
+		PShape s = app.createShape();
+		s.beginShape();
+		// draw relative to the center of this person
+		s.translate(centerX, centerY);
+		s.scale(.01f, .01f);
+		for (PVector v : morph) {
+			s.vertex(v.x, v.y);
+		}
+		s.endShape(PApplet.CLOSE);
+		app.shape(s);
+
 		
 		if (morphing) {
 			// Look at each vertex
