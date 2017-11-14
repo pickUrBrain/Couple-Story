@@ -79,31 +79,6 @@ public class Shape {
 		}
 	}
 
-	// the old method that change location when new person enters or exits
-//	public void morph(ArrayList<PVector> vertices) {
-//		// Look at each vertex
-//		for (int i = 0; i < circle.size(); i++) {
-//			PVector v1;
-//			v1 = vertices.get(i);
-//			// Get the vertex we will draw
-//			PVector v2 = morph.get(i);
-//			// Lerp to the target
-//			v2.lerp(v1, (float) 0.1);
-//		}
-//		PShape s = app.createShape();
-//		app.translate(centerX, centerY);
-//		s.beginShape();
-//		s.translate(centerX, centerY);
-//		// draw relative to the center of this person
-//		s.scale(.01f, .01f);
-//		// app.translate(centerX, centerY);
-//		for (PVector v : morph) {
-//			s.vertex(v.x, v.y);
-//		}
-//		s.endShape(PApplet.CLOSE);
-//		app.shape(s);
-//	}
-
 	public void morph(ArrayList<PVector> vertices) {
 		// Look at each vertex
 		for (int i = 0; i < circle.size(); i++) {
@@ -188,20 +163,6 @@ public class Shape {
 			square.add(new PVector(-5, y));
 		}
 	}
-
-	// public void draw() {
-	// app.fill(255);
-	// app.noStroke();
-	// drawIfValid(new PVector(centerX, centerY));
-	// // halfHeart(true);
-	// morph(circle);
-	//
-	// }
-	//
-	// public void drawIfValid(PVector vec) {
-	// if (vec != null)
-	// app.ellipse(vec.x, vec.y, .1f, .1f);
-	// }
 
 	public void regPolygon(int npoints) {
 		float angle = PConstants.TWO_PI / npoints;
