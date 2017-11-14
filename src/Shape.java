@@ -74,43 +74,17 @@ public class Shape {
 				v2.lerp(v1, (float) 0.1);
 			}
 		}
+
 		PShape s = app.createShape();
 		s.beginShape();
 		// draw relative to the center of this person
 		s.translate(centerX, centerY);
-		s.scale(.01f, .01f);
+		s.scale(.1f, .1f);
 		for (PVector v : morph) {
 			s.vertex(v.x, v.y);
 		}
 		s.endShape(PApplet.CLOSE);
 		app.shape(s);
-
-		
-		if (morphing) {
-			// Look at each vertex
-			for (int i = 0; i < circle.size(); i++) {
-				PVector v1 = null;
-				// Are we lerping to the circle or square?
-				if (!isSquare) {
-					v1 = circle.get(i);
-				} else {
-					v1 = square.get(i);
-				}
-				// Get the vertex we will draw
-				PVector v2 = morph.get(i);
-				// Lerp to the target
-				v2.lerp(v1, (float) 0.1);
-			}
-		}
-		app.beginShape();
-		// draw relative to the center of this person
-		app.translate(centerX, centerY);
-		app.scale(.01f, .01f);
-		// app.translate(centerX, centerY);
-		for (PVector v : morph) {
-			app.vertex(v.x, v.y);
-		}
-		app.endShape(PApplet.CLOSE);
 
 	}
 
@@ -147,15 +121,18 @@ public class Shape {
 			// Lerp to the target
 			v2.lerp(v1, (float) 0.1);
 		}
-		app.beginShape();
-		// draw relative to the center of this person
+		PShape s = app.createShape();
 		app.translate(centerX, centerY);
-		app.scale(.01f, .01f);
+		s.beginShape();
+		s.translate(centerX, centerY);
+		// draw relative to the center of this person
+		s.scale(.01f, .01f);
 		// app.translate(centerX, centerY);
 		for (PVector v : morph) {
-			app.vertex(v.x, v.y);
+			s.vertex(v.x, v.y);
 		}
-		app.endShape(PApplet.CLOSE);
+		s.endShape(PApplet.CLOSE);
+		app.shape(s);
 	}
 
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
@@ -187,13 +164,14 @@ public class Shape {
 			// Note we are not starting from 0 in order to match the
 			// path of a circle.
 			PVector v = PVector.fromAngle(PApplet.radians(angle - 135));
-			v.mult(30);
+			v.mult(15);
 			circle.add(v);
 			// Let's fill out morph ArrayList with blank PVectors while we are at it
 			morph.add(new PVector());
 		}
 	}
 
+	// MAKE THE SQUARE BIGGER THAN THE CIRCLE!!!!!
 	public void initSquare() {
 		// A square is a bunch of vertices along straight lines
 		// Top of square

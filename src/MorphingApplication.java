@@ -46,7 +46,7 @@ public class MorphingApplication extends PApplet {
 				s.update(b, isMorph, isSquare); //if there's any changes in number of ppl, change morph true
 				//if there's two people, change isSquare to false
 				System.out.println("body: "+ b.getId()+ "morph: " + isMorph + "is square" + isSquare);
-				
+//				s.draw();
 				if (numPeople == 1){
 					System.out.println("num p: 1");
 					s.draw(2);
@@ -60,11 +60,11 @@ public class MorphingApplication extends PApplet {
 		}
 	}
 
-	public void drawIfValid(PVector vec) {
-		if (vec != null) {
-			ellipse(vec.x, vec.y, .1f, .1f);
-		}
-	}
+//	public void drawIfValid(PVector vec) {
+//		if (vec != null) {
+//			ellipse(vec.x, vec.y, .1f, .1f);
+//		}
+//	}
 
 	public static void main(String[] args) {
 		PApplet.main(MorphingApplication.class.getName());
