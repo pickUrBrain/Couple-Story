@@ -79,7 +79,31 @@ public class Shape {
 		}
 	}
 
-	// tested: is being called
+	// the old method that change location when new person enters or exits
+//	public void morph(ArrayList<PVector> vertices) {
+//		// Look at each vertex
+//		for (int i = 0; i < circle.size(); i++) {
+//			PVector v1;
+//			v1 = vertices.get(i);
+//			// Get the vertex we will draw
+//			PVector v2 = morph.get(i);
+//			// Lerp to the target
+//			v2.lerp(v1, (float) 0.1);
+//		}
+//		PShape s = app.createShape();
+//		app.translate(centerX, centerY);
+//		s.beginShape();
+//		s.translate(centerX, centerY);
+//		// draw relative to the center of this person
+//		s.scale(.01f, .01f);
+//		// app.translate(centerX, centerY);
+//		for (PVector v : morph) {
+//			s.vertex(v.x, v.y);
+//		}
+//		s.endShape(PApplet.CLOSE);
+//		app.shape(s);
+//	}
+
 	public void morph(ArrayList<PVector> vertices) {
 		// Look at each vertex
 		for (int i = 0; i < circle.size(); i++) {
@@ -88,20 +112,24 @@ public class Shape {
 			// Get the vertex we will draw
 			PVector v2 = morph.get(i);
 			// Lerp to the target
-			v2.lerp(v1, (float) 0.1);
+			v2.lerp(v1, (float) 0.05);
 		}
+		app.pushMatrix();
+		// shape that represents the new enter
 		PShape s = app.createShape();
+		// draw relative to the center of this person
 		app.translate(centerX, centerY);
 		s.beginShape();
-		s.translate(centerX, centerY);
-		// draw relative to the center of this person
 		s.scale(.01f, .01f);
-		// app.translate(centerX, centerY);
-		for (PVector v : morph) {
+		// app.translate(centerX, centerY); // looks like it doesn't matter to be within
+		// shape drawing
+		for (PVector v : morph)
 			s.vertex(v.x, v.y);
-		}
 		s.endShape(PApplet.CLOSE);
+		// create this shape in its parent papplet
 		app.shape(s);
+		app.popMatrix();
+
 	}
 
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
