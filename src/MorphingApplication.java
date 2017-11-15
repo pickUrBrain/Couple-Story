@@ -101,7 +101,7 @@ public class MorphingApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder
 		 */
 //		try {
-//			kinectReader = new KinectBodyDataProvider("noExitTest.kinect", 2);
+//			kinectReader = new KinectBodyDataProvider("exitTest.kinect", 2);
 //		} catch (IOException e) {
 //			System.out.println("Unable to create kinect producer");
 //		}
@@ -187,6 +187,7 @@ public class MorphingApplication extends PApplet {
 									- (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.3 && !s1.isMarried && !s2.isMarried) {
 								s1.setIsMarried(true);
 								s2.setIsMarried(true);
+							
 								playMusic = false;
 							}
 						}
