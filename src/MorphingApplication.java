@@ -37,7 +37,8 @@ public class MorphingApplication extends PApplet {
 		colorMode(PApplet.RGB);
 		background(0);
 
-		KinectBodyData bodyData = kinectReader.getData();
+//		KinectBodyData bodyData = kinectReader.getData();
+		KinectBodyData bodyData = kinectReader.getMostRecentData();
 		tracker.update(bodyData);
 		isMorph = tracker.getMorph();
 		
@@ -64,7 +65,8 @@ public class MorphingApplication extends PApplet {
 				//if there's two people, change isSquare to false
 			
 				if (numPeople == 1){
-					s.draw(2, new Color(0, 0, 255));
+					//s.draw(2, new Color(0, 0, 255));
+					s.draw(2, new Color(51, 171, 249));
 					body1 = b;
 					
 				}
@@ -94,18 +96,18 @@ public class MorphingApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("exitTest.kinect", 2);
+			kinectReader = new KinectBodyDataProvider("noExitTest.kinect", 2);
 		} catch (IOException e) {
 			System.out.println("Unable to creat e kinect producer");
 		}
 
-		// kinectReader = new KinectBodyDataProvider(8008);
+		//kinectReader = new KinectBodyDataProvider(8008);
 		kinectReader.start();
 
 	}
 
 	public void settings() {
-		createWindow(true, false, .25f);
+		createWindow(true, true, .25f);
 	}
 
 	public void createWindow(boolean useP2D, boolean isFullscreen, float windowsScale) {
@@ -173,6 +175,11 @@ public class MorphingApplication extends PApplet {
 			s1.draw(0, new Color(232, 64, 170));
 			s2.draw(-1, new Color(232, 64, 170));
 			
+			if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.3 && !s1.isMarried && !s2.isMarried){
+				s1.setIsMarried(true);
+				s2.setIsMarried(true);
+			}
+			
 			return true;
 		}
 
@@ -180,6 +187,8 @@ public class MorphingApplication extends PApplet {
 			//change the gradient color
 			s1.draw(3, new Color(150, 0, 250));
 			s2.draw(3, new Color(150, 0, 250));
+			s1.setIsMarried(false);
+			s2.setIsMarried(false);
 		} else{
 			//if two shapes are apart, just draw circle
 			s1.draw(1, new Color(232, 64, 170));
