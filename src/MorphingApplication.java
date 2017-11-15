@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import processing.core.PApplet;
 import processing.core.PVector;
+import sun.audio.*;
+import java.io.*;
 
 public class MorphingApplication extends PApplet {
 
@@ -24,11 +26,14 @@ public class MorphingApplication extends PApplet {
 	boolean isMorph = false;
 
 	boolean isSquare = true;
+	
+	boolean playMusic = false;
 
 	private Body body1;
 	private Body body2;
 
 	public static float PROJECTOR_RATIO = 1080f / 1920.0f;
+	
 
 	public void draw() {
 
@@ -95,13 +100,13 @@ public class MorphingApplication extends PApplet {
 		/*
 		 * use this code to run your PApplet from data recorded by UPDRecorder
 		 */
-		try {
-			kinectReader = new KinectBodyDataProvider("exitTest.kinect", 2);
-		} catch (IOException e) {
-			System.out.println("Unable to creat e kinect producer");
-		}
+//		try {
+//			kinectReader = new KinectBodyDataProvider("noExitTest.kinect", 2);
+//		} catch (IOException e) {
+//			System.out.println("Unable to create kinect producer");
+//		}
 
-		// kinectReader = new KinectBodyDataProvider(8008);
+		kinectReader = new KinectBodyDataProvider(8008);
 		kinectReader.start();
 
 	}
@@ -182,6 +187,7 @@ public class MorphingApplication extends PApplet {
 									- (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.3 && !s1.isMarried && !s2.isMarried) {
 								s1.setIsMarried(true);
 								s2.setIsMarried(true);
+								playMusic = false;
 							}
 						}
 
@@ -201,6 +207,9 @@ public class MorphingApplication extends PApplet {
 					} else if (s1.isDivorced && s2.isDivorced) {
 						s1.draw(4, new Color(168, 111, 186));
 						s2.draw(4, new Color(168, 111, 186));
+						System.out.println("PLAY MUSIC");
+						if (!playMusic)
+							playMusic();
 					} else {
 						// if two shapes are apart, just draw circle
 						s1.draw(1, new Color(232, 64, 170));
@@ -221,6 +230,29 @@ public class MorphingApplication extends PApplet {
 		// gradient color
 
 		return false;
+	}
+	
+	public void playMusic(){
+		
+		music();
+		playMusic = true;
+	}
+	
+	public static void music(){
+		
+		AudioPlayer MGP = AudioPlayer.player;
+		AudioStream BGM;
+		AudioData MD;
+		AudioDataStream loop = null;
+		
+		try{
+		BGM = new AudioStream(new FileInputStream("taylor6.wav"));
+		MD = BGM.getData();
+		loop = new AudioDataStream(MD);
+		} catch (IOException e){
+		}
+		
+		MGP.start(loop);
 	}
 
 }
