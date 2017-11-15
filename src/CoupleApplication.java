@@ -7,7 +7,7 @@ import processing.core.PVector;
 import sun.audio.*;
 import java.io.*;
 
-public class MorphingApplication extends PApplet {
+public class CoupleApplication extends PApplet {
 
 	int count = 0; // count of people
 	PApplet app;
@@ -24,11 +24,8 @@ public class MorphingApplication extends PApplet {
 	PersonTracker tracker = new PersonTracker();
 
 	boolean isMorph = false;
-
 	boolean isSquare = true;
-
 	boolean playMusic = false;
-
 	boolean married = false;
 
 	private Body body1;
@@ -40,11 +37,10 @@ public class MorphingApplication extends PApplet {
 		setScale(.5f);
 		colorMode(PApplet.RGB);
 
-		if (married) {
+		if (married)
 			background(255, 227, 235); // baby pink;
-		} else {
+		else
 			background(0);
-		}
 
 		// KinectBodyData bodyData = kinectReader.getData();
 		KinectBodyData bodyData = kinectReader.getMostRecentData();
@@ -94,8 +90,110 @@ public class MorphingApplication extends PApplet {
 		}
 	}
 
+	public boolean isClose(Body b1, Body b2) {
+
+		Body bodyL;
+		Body bodyR;
+
+		if (b1 != null && b2 != null) {
+
+			Shape s1 = shapes.get(b1.getId());
+			Shape s2 = shapes.get(b2.getId());
+
+			PVector p1 = b1.getJoint(Body.SPINE_BASE);
+			PVector p2 = b2.getJoint(Body.SPINE_BASE);
+
+			if (p1 != null && p2 != null) {
+
+				if (p2.x < p1.x) {
+					System.out.println("CHECK");
+					bodyR = b1;
+					bodyL = b2;
+				} else {
+					bodyL = b1;
+					bodyR = b2;
+				}
+
+				if (bodyL.getJoint(Body.SHOULDER_RIGHT) != null && bodyR.getJoint(Body.SHOULDER_LEFT) != null) {
+
+//					System.out.println(
+//							bodyL.getJoint(Body.SHOULDER_RIGHT).x + " body R: " + bodyR.getJoint(Body.SHOULDER_LEFT).x);
+
+					// if two shapes are close enough
+					if (Math.abs(
+							(bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.8) {
+
+						s1 = shapes.get(bodyL.getId());
+						s2 = shapes.get(bodyR.getId());
+
+						if (!s1.isDivorced && !s2.isDivorced) {
+
+							// draw the heart
+							s1.draw(0, new Color(232, 64, 170));
+							s2.draw(-1, new Color(232, 64, 170));
+
+							if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x)
+									- (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.3 && !s1.isMarried && !s2.isMarried) {
+								s1.setIsMarried(true);
+								s2.setIsMarried(true);
+								married = true;
+								playMusic = false;
+							}
+						}
+						return true;
+					}
+
+					// if the shape is married before, we're never getting back
+
+					if (s1.isMarried && s2.isMarried) {
+						// change the gradient color
+						s1.draw(1, new Color(232, 64, 170));
+						s2.draw(1, new Color(232, 64, 170));
+						s1.setIsMarried(false);
+						s2.setIsMarried(false);
+						s1.setIsDivorced(true);
+						s2.setIsDivorced(true);
+						married = false;
+					} else if (s1.isDivorced && s2.isDivorced) {
+						s1.draw(4, new Color(168, 111, 186));
+						s2.draw(4, new Color(168, 111, 186));
+						married = false;
+						System.out.println("PLAY MUSIC");
+						if (!playMusic)
+							playMusic();
+					} else {
+						// if two shapes are apart, just draw circle
+						s1.draw(1, new Color(232, 64, 170));
+						s2.draw(1, new Color(232, 64, 170));
+						married = false;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public void playMusic() {
+		music();
+		playMusic = true;
+	}
+
+	public static void music() {
+		AudioPlayer MGP = AudioPlayer.player;
+		AudioStream BGM;
+		AudioData MD;
+		AudioDataStream loop = null;
+		try {
+			BGM = new AudioStream(new FileInputStream("taylor6.wav"));
+			MD = BGM.getData();
+			loop = new AudioDataStream(MD);
+		} catch (IOException e) {
+		}
+		MGP.start(loop);
+	}
+
 	public static void main(String[] args) {
-		PApplet.main(MorphingApplication.class.getName());
+		PApplet.main(CoupleApplication.class.getName());
 	}
 
 	public void setup() {
@@ -103,13 +201,13 @@ public class MorphingApplication extends PApplet {
 		/*
 		 * use this code to run your PApplet from data recorded by UPDRecorder
 		 */
-		try {
-			kinectReader = new KinectBodyDataProvider("exitTest.kinect", 2);
-		} catch (IOException e) {
-			System.out.println("Unable to create kinect producer");
-		}
+		// try {
+		// kinectReader = new KinectBodyDataProvider("exitTest.kinect", 2);
+		// } catch (IOException e) {
+		// System.out.println("Unable to create kinect producer");
+		// }
 
-		// kinectReader = new KinectBodyDataProvider(8008);
+		kinectReader = new KinectBodyDataProvider(8008);
 		kinectReader.start();
 
 	}
@@ -139,126 +237,6 @@ public class MorphingApplication extends PApplet {
 	public void setScale(float zoom) {
 		scale(zoom * width / 2.0f, zoom * -width / 2.0f);
 		translate(1f / zoom, -PROJECTOR_RATIO / zoom);
-	}
-
-	public boolean isClose(Body b1, Body b2) {
-
-		Body bodyL;
-		Body bodyR;
-
-		if (b1 != null && b2 != null) {
-
-			Shape s1 = shapes.get(b1.getId());
-			Shape s2 = shapes.get(b2.getId());
-
-			PVector p1 = b1.getJoint(Body.SPINE_BASE);
-			PVector p2 = b2.getJoint(Body.SPINE_BASE);
-
-			// determine which body is on the left or right
-
-			if (p1 != null && p2 != null) {
-
-				if (p2.x < p1.x) {
-					System.out.println("CHECK");
-					bodyR = b1;
-					bodyL = b2;
-				} else {
-					bodyL = b1;
-					bodyR = b2;
-				}
-
-				if (bodyL.getJoint(Body.SHOULDER_RIGHT) != null && bodyR.getJoint(Body.SHOULDER_LEFT) != null) {
-
-					System.out.println(
-							bodyL.getJoint(Body.SHOULDER_RIGHT).x + " body R: " + bodyR.getJoint(Body.SHOULDER_LEFT).x);
-
-					// if two shapes are close enough
-					if (Math.abs(
-							(bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.8) {
-
-						s1 = shapes.get(bodyL.getId());
-						s2 = shapes.get(bodyR.getId());
-
-						if (!s1.isDivorced && !s2.isDivorced) {
-
-							// draw the heart
-							s1.draw(0, new Color(232, 64, 170));
-							s2.draw(-1, new Color(232, 64, 170));
-
-							if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x)
-									- (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.3 && !s1.isMarried && !s2.isMarried) {
-								s1.setIsMarried(true);
-								s2.setIsMarried(true);
-								married = true;
-								playMusic = false;
-							}
-						}
-
-						return true;
-					}
-
-					// if the shape is married before, we're never getting back
-
-					if (s1.isMarried && s2.isMarried) {
-						// change the gradient color
-						s1.draw(1, new Color(232, 64, 170));
-						s2.draw(1, new Color(232, 64, 170));
-						s1.setIsMarried(false);
-						s2.setIsMarried(false);
-						s1.setIsDivorced(true);
-						s2.setIsDivorced(true);
-						married = false;
-					} else if (s1.isDivorced && s2.isDivorced) {
-						s1.draw(4, new Color(168, 111, 186));
-						s2.draw(4, new Color(168, 111, 186));
-						married = false;
-						System.out.println("PLAY MUSIC");
-						if (!playMusic)
-							playMusic();
-					} else {
-						// if two shapes are apart, just draw circle
-						s1.draw(1, new Color(232, 64, 170));
-						s2.draw(1, new Color(232, 64, 170));
-						married = false;
-					}
-
-				}
-
-			}
-
-		}
-
-		return false;
-	}
-
-	public boolean isApart(PVector p1, PVector p2) {
-
-		// gradient color
-
-		return false;
-	}
-
-	public void playMusic() {
-
-		music();
-		playMusic = true;
-	}
-
-	public static void music() {
-
-		AudioPlayer MGP = AudioPlayer.player;
-		AudioStream BGM;
-		AudioData MD;
-		AudioDataStream loop = null;
-
-		try {
-			BGM = new AudioStream(new FileInputStream("taylor6.wav"));
-			MD = BGM.getData();
-			loop = new AudioDataStream(MD);
-		} catch (IOException e) {
-		}
-
-		MGP.start(loop);
 	}
 
 }
