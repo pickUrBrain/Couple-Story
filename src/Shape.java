@@ -1,5 +1,9 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
+
+import javafx.scene.shape.Circle;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PShape;
@@ -40,6 +44,8 @@ public class Shape {
 	// store the vertices that been lerped to
 	ArrayList<PVector> morphSet = new ArrayList<PVector>();
 
+	ArrayList<PVector> traces = new ArrayList<PVector>();
+
 	public Shape(PApplet app) {
 		this.app = app;
 		app.colorMode(PApplet.HSB);
@@ -60,10 +66,13 @@ public class Shape {
 			centerY = spineBase.y;
 			// the Euclidean distance between two points
 			rad = Math.abs(head.dist(spineBase)) / 2f;
+			traces.add(new PVector(centerX, centerY));
 		}
 	}
 
 	public void draw(int state, Color color) {
+		// app.fill(color.getRGB());
+		// brokenHeart(crclSet);
 		switch (state) {
 		case -1:
 			app.fill(color.getRGB());
@@ -87,13 +96,18 @@ public class Shape {
 			break;
 		case 4:
 			app.fill(color.getRGB());
-			brokenCrcl();
+			broken();
 			break;
 		}
 	}
-	
-	public void brokenCrcl()	{
-		
+
+	public void broken() {
+		app.strokeWeight((float) 0.01);
+		for (int i = 1; i < traces.size(); i++) {
+			float val = (float) (i / traces.size() * 204.0 + 51);
+			app.stroke(val);
+			app.line(traces.get(i - 1).x, traces.get(i - 1).y, traces.get(i).x, traces.get(i).y);
+		}
 	}
 
 	public void morph(ArrayList<PVector> vertices) {
@@ -158,7 +172,7 @@ public class Shape {
 
 	public void statusQuo() {
 		if (isSquare) {
-			
+
 			app.noStroke();
 			app.pushMatrix();
 			// shape that represents the new enter
@@ -245,13 +259,13 @@ public class Shape {
 	public void setIsMarried(boolean value) {
 		isMarried = value;
 	}
-	
-	public void setIsDivorced(boolean value){
-		isDivorced = value;
-	}
-	
-	public boolean getIsDivorced(){
+
+	public boolean getIsDivorced() {
 		return isDivorced;
+	}
+
+	public void setIsDivorced(boolean value) {
+		isDivorced = value;
 	}
 
 }
