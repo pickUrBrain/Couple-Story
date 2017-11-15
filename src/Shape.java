@@ -27,6 +27,7 @@ public class Shape {
 	boolean morphing = false;
 	boolean isSquare = true;
 	boolean isMarried = false;
+	boolean isDivorced = false;
 
 	// float angle = 0;
 	// float aVelocity = 0;
@@ -81,10 +82,18 @@ public class Shape {
 			morph(sqrSet);
 			break;
 		case 3:
-			app.fill(0, 255, 255);
+			app.fill(color.getRGB());
 			morph(crclSet);
 			break;
+		case 4:
+			app.fill(color.getRGB());
+			brokenCrcl();
+			break;
 		}
+	}
+	
+	public void brokenCrcl()	{
+		
 	}
 
 	public void morph(ArrayList<PVector> vertices) {
@@ -235,6 +244,14 @@ public class Shape {
 
 	public void setIsMarried(boolean value) {
 		isMarried = value;
+	}
+	
+	public void setIsDivorced(boolean value){
+		isDivorced = value;
+	}
+	
+	public boolean getIsDivorced(){
+		return isDivorced;
 	}
 
 }
