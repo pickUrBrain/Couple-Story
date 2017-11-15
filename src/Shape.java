@@ -14,6 +14,7 @@ public class Shape {
 
 	Body body;
 	PApplet app;
+	int color;
 
 	float centerX;
 	float centerY;
@@ -41,9 +42,9 @@ public class Shape {
 
 	public Shape(PApplet app) {
 		this.app = app;
-		//app.fill(color.getRGB());
 
-		//app.colorMode(PApplet.HSB);
+		app.colorMode(PApplet.HSB);
+		color = app.color(app.random(255), 255, 255);
 		initCircle();
 		initSquare();
 	}
@@ -81,6 +82,10 @@ public class Shape {
 		case 2:
 			app.fill(color.getRGB());
 			morph(sqrSet);
+			break;
+		case 3:
+			app.fill(0, 255, 255);
+			morph(crclSet);
 			break;
 		default:
 

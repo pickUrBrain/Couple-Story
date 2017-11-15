@@ -10,8 +10,12 @@ public class MorphingApplication extends PApplet {
 	int count = 0; // count of people
 	PApplet app;
 	//app.colorMode(PApplet.HSB);
-	int color = color(random(255), 255, 255);
-
+	//int color = color(random(255), 255, 255);
+	Color cRed = new Color(255, 0, 0);
+	Color cGreen = new Color(0, 255, 0);
+	Color cBlue = new Color(0,0,255);
+	
+	
 	HashMap<Long, Shape> shapes = new HashMap<Long, Shape>();
 
 	KinectBodyDataProvider kinectReader;
@@ -28,8 +32,9 @@ public class MorphingApplication extends PApplet {
 	public static float PROJECTOR_RATIO = 1080f / 1920.0f;
 
 	public void draw() {
+		
 		setScale(.5f);
-		colorMode(PApplet.HSB);
+		colorMode(PApplet.RGB);
 		background(0);
 
 		KinectBodyData bodyData = kinectReader.getData();
@@ -70,7 +75,7 @@ public class MorphingApplication extends PApplet {
 						body2 = b;
 					}
 					if (isClose(body1, body2)){
-						
+						System.out.println(body1.getId() + "body 2: " + body2.getId());
 						//s.draw(1, new Color(232, 64, 170));
 					}
 				}
@@ -130,47 +135,61 @@ public class MorphingApplication extends PApplet {
 		
 		Body bodyL;
 		Body bodyR;
+		float inter;
 		
 		if (b1!= null && b2 != null){
+
+			Shape s1 = shapes.get(b1.getId());
+			Shape s2 = shapes.get(b2.getId());
+			
 		PVector p1 = b1.getJoint(Body.SPINE_BASE);
 		PVector p2 = b2.getJoint(Body.SPINE_BASE);
 		
 		//determine which body is on the left or right
 		
 		if (p1 != null && p2!= null){
-		if (p1.x < p2.x){
-			bodyL = b1;
-			bodyR = b2;
-		} else {
-			bodyR = b1;
-			bodyL = b2;
-		}
-		Shape s1 = shapes.get(bodyL.getId());
-		Shape s2 = shapes.get(bodyR.getId());
+			
+			if (p2.x < p1.x){
+				System.out.println("CHECK");
+				bodyR = b1;
+				bodyL = b2;
+			} else {
+				bodyL = b1;
+				bodyR = b2;
+			}
+			
 		
 		if (bodyL.getJoint(Body.SHOULDER_RIGHT)!=null && bodyR.getJoint(Body.SHOULDER_LEFT)!= null){
+			
+			System.out.println(bodyL.getJoint(Body.SHOULDER_RIGHT).x+ " body R: "  + bodyR.getJoint(Body.SHOULDER_LEFT).x);
 		
 		//if two shapes are close enough
 		if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.8){
+
+			s1 = shapes.get(bodyL.getId());
+			s2 = shapes.get(bodyR.getId());
 			
 			//draw the heart
-			s1.draw(-1, new Color(232, 64, 170));
-			s2.draw(0, new Color(232, 64, 170));
+			s1.draw(0, new Color(232, 64, 170));
+			s2.draw(-1, new Color(232, 64, 170));
 			
 			return true;
 		}
 
 		if (s1.isMarried && s2.isMarried){
 			//change the gradient color
-			s1.draw(1, new Color(150, 0, 250));
-			s2.draw(1, new Color(150, 0, 250));
+			s1.draw(3, new Color(150, 0, 250));
+			s2.draw(3, new Color(150, 0, 250));
 		} else{
 			//if two shapes are apart, just draw circle
 			s1.draw(1, new Color(232, 64, 170));
 			s2.draw(1, new Color(232, 64, 170));
 		}
+		
 		}
+		
 		}
+		
 		}
 		
 		return false;
