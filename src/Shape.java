@@ -124,20 +124,22 @@ public class Shape {
 		// draw relative to the center of this person
 		if (isLeft) {
 			centerX = shoulderL.x - 0.05f; // change the coordinate a bit to adjust the heart shape
-			//centerY = centerY - 0.2f;
+			// centerY = centerY - 0.2f;
 		} else {
 			centerX = shoulderR.x + 0.05f; // change the coordinate a bit to adjust the heart shape
-			//centerY = centerY - 0.2f;
+			// centerY = centerY - 0.2f;
 		}
 		app.translate(centerX, centerY);
 		s.beginShape();
 		s.scale(.01f, .01f);
 		if (isLeft) {
-			s.vertex(-50, -15);
-			s.bezierVertex(-50, 5, 0, -5, -50, -40);
+			s.vertex(50, 15);
+			s.bezierVertex(50, -5, 0, 5, 50, 40);
+			s.rotate((float) (PApplet.PI));
 		} else {
-			s.vertex(-50, -15);
-			s.bezierVertex(-50, 5, -100, -5, -50, -40);
+			s.vertex(50, 15);
+			s.bezierVertex(50, -5, 100, 5, 50, 40);
+			s.rotate((float) (PApplet.PI));
 		}
 		s.endShape(PApplet.CLOSE);
 		// create this shape in its parent pApplet
@@ -231,10 +233,9 @@ public class Shape {
 	public boolean getIsMarried() {
 		return isMarried;
 	}
-	
-	public void setIsMarried(boolean value){
+
+	public void setIsMarried(boolean value) {
 		isMarried = value;
 	}
-
 
 }
