@@ -139,6 +139,7 @@ public class Shape {
 
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
 	public void halfHeart(boolean isLeft) {
+		
 		app.smooth();
 		app.strokeWeight(1f);
 		app.pushMatrix();
