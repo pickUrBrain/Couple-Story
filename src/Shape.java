@@ -25,6 +25,7 @@ public class Shape {
 
 	boolean morphing = false;
 	boolean isSquare = true;
+	boolean isMarried = false;
 
 	// float angle = 0;
 	// float aVelocity = 0;
@@ -116,8 +117,10 @@ public class Shape {
 
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
 	public void halfHeart(boolean isLeft) {
+		
+		isMarried = true;
+		
 		app.smooth();
-		//app.fill(255);
 		app.strokeWeight(1f);
 		app.pushMatrix();
 		// shape that represents the new enter
@@ -227,6 +230,11 @@ public class Shape {
 			app.vertex(sx, sy);
 		}
 		app.endShape(PConstants.CLOSE);
+	}
+	
+	public boolean getIsMarried(){
+		
+		return isMarried;
 	}
 
 }

@@ -8,6 +8,9 @@ import processing.core.PVector;
 public class MorphingApplication extends PApplet {
 
 	int count = 0; // count of people
+	PApplet app;
+	//app.colorMode(PApplet.HSB);
+	int color = color(random(255), 255, 255);
 
 	HashMap<Long, Shape> shapes = new HashMap<Long, Shape>();
 
@@ -21,15 +24,13 @@ public class MorphingApplication extends PApplet {
 
 	private Body body1;
 	private Body body2;
-	
-	boolean isApart = false;
 
 	public static float PROJECTOR_RATIO = 1080f / 1920.0f;
 
 	public void draw() {
 		setScale(.5f);
 		colorMode(PApplet.HSB);
-		background(173);
+		background(0);
 
 		KinectBodyData bodyData = kinectReader.getData();
 		tracker.update(bodyData);
@@ -130,7 +131,6 @@ public class MorphingApplication extends PApplet {
 		Body bodyL;
 		Body bodyR;
 		
-		
 		if (b1!= null && b2 != null){
 		PVector p1 = b1.getJoint(Body.SPINE_BASE);
 		PVector p2 = b2.getJoint(Body.SPINE_BASE);
@@ -145,8 +145,8 @@ public class MorphingApplication extends PApplet {
 			bodyR = b1;
 			bodyL = b2;
 		}
-		Shape s1 = shapes.get(body1.getId());
-		Shape s2 = shapes.get(body2.getId());
+		Shape s1 = shapes.get(bodyL.getId());
+		Shape s2 = shapes.get(bodyR.getId());
 		
 		if (bodyL.getJoint(Body.SHOULDER_RIGHT)!=null && bodyR.getJoint(Body.SHOULDER_LEFT)!= null){
 		
@@ -156,18 +156,16 @@ public class MorphingApplication extends PApplet {
 			//draw the heart
 			s1.draw(-1, new Color(232, 64, 170));
 			s2.draw(0, new Color(232, 64, 170));
-			isApart = true;
 			
 			return true;
 		}
 
-		if (isApart){
-			//if two shapes are apart, just draw circle
+		if (s1.isMarried && s2.isMarried){
+			//change the gradient color
 			s1.draw(1, new Color(150, 0, 250));
 			s2.draw(1, new Color(150, 0, 250));
-			System.out.println("is apart flag");
-			isApart = false;
 		} else{
+			//if two shapes are apart, just draw circle
 			s1.draw(1, new Color(232, 64, 170));
 			s2.draw(1, new Color(232, 64, 170));
 		}
