@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 import sun.audio.*;
 import java.io.*;
@@ -189,6 +190,8 @@ public class MorphingApplication extends PApplet {
 									- (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.3 && !s1.isMarried && !s2.isMarried) {
 								s1.setIsMarried(true);
 								s2.setIsMarried(true);
+								if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x)
+									- (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.27)
 								married = true;
 								playMusic = false;
 							}
