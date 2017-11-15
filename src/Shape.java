@@ -116,10 +116,6 @@ public class Shape {
 
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
 	public void halfHeart(boolean isLeft) {
-<<<<<<< HEAD
-		
-=======
->>>>>>> origin/master
 		app.smooth();
 		app.strokeWeight(1f);
 		app.pushMatrix();
@@ -128,10 +124,10 @@ public class Shape {
 		// draw relative to the center of this person
 		if (isLeft) {
 			centerX = shoulderL.x - 0.05f; // change the coordinate a bit to adjust the heart shape
-			centerY = centerY - 0.2f;
+			//centerY = centerY - 0.2f;
 		} else {
 			centerX = shoulderR.x + 0.05f; // change the coordinate a bit to adjust the heart shape
-			centerY = centerY - 0.2f;
+			//centerY = centerY - 0.2f;
 		}
 		app.translate(centerX, centerY);
 		s.beginShape();
@@ -240,8 +236,5 @@ public class Shape {
 		isMarried = value;
 	}
 
-	public void setIsMarried(boolean value) {
-		isMarried = value;
-	}
 
 }
