@@ -32,17 +32,15 @@ public class Shape {
 	// float aVelocity = 0;
 	// float aAcceleration = 0;
 
-	// Two ArrayLists to store the vertices for two shapes
-	// This example assumes that each shape will have the same
-	// number of vertices, i.e. the size of each ArrayList will be the same
+	// store the vertices for two shapes assuming each shape has the same number of
+	// vertices
 	ArrayList<PVector> crclSet = new ArrayList<PVector>();
 	ArrayList<PVector> sqrSet = new ArrayList<PVector>();
-
+	// store the vertices that been lerped to
 	ArrayList<PVector> morphSet = new ArrayList<PVector>();
 
 	public Shape(PApplet app) {
 		this.app = app;
-
 		app.colorMode(PApplet.HSB);
 		color = app.color(app.random(255), 255, 255);
 		initCircle();
@@ -65,7 +63,6 @@ public class Shape {
 	}
 
 	public void draw(int state, Color color) {
-		// halfHeart(true);
 		switch (state) {
 		case -1:
 			app.fill(color.getRGB());
@@ -87,8 +84,6 @@ public class Shape {
 			app.fill(0, 255, 255);
 			morph(crclSet);
 			break;
-		default:
-
 		}
 	}
 
@@ -102,7 +97,6 @@ public class Shape {
 			// Lerp to the target
 			v2.lerp(v1, (float) 0.05);
 		}
-		//app.fill(255);
 		app.noStroke();
 		app.pushMatrix();
 		// shape that represents the new enter
@@ -122,29 +116,32 @@ public class Shape {
 
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
 	public void halfHeart(boolean isLeft) {
+<<<<<<< HEAD
 		
+=======
+>>>>>>> origin/master
 		app.smooth();
 		app.strokeWeight(1f);
 		app.pushMatrix();
 		// shape that represents the new enter
 		PShape s = app.createShape();
 		// draw relative to the center of this person
-		if (isLeft){
-			centerX = shoulderL.x - 0.05f; //change the coordinate a bit to adjust the heart shape
+		if (isLeft) {
+			centerX = shoulderL.x - 0.05f; // change the coordinate a bit to adjust the heart shape
 			centerY = centerY - 0.2f;
-		} else{
-			centerX = shoulderR.x + 0.05f; //change the coordinate a bit to adjust the heart shape
+		} else {
+			centerX = shoulderR.x + 0.05f; // change the coordinate a bit to adjust the heart shape
 			centerY = centerY - 0.2f;
 		}
 		app.translate(centerX, centerY);
 		s.beginShape();
 		s.scale(.01f, .01f);
 		if (isLeft) {
-			s.vertex(50, 15);
-			s.bezierVertex(50, -5, 100, 5, 50, 40);
+			s.vertex(-50, -15);
+			s.bezierVertex(-50, 5, 0, -5, -50, -40);
 		} else {
-			s.vertex(50, 15);
-			s.bezierVertex(50, -5, 0, 5, 50, 40);
+			s.vertex(-50, -15);
+			s.bezierVertex(-50, 5, -100, -5, -50, -40);
 		}
 		s.endShape(PApplet.CLOSE);
 		// create this shape in its parent pApplet
@@ -154,7 +151,7 @@ public class Shape {
 
 	public void statusQuo() {
 		if (isSquare) {
-			//app.fill(255);
+			// app.fill(255);
 			app.noStroke();
 			app.pushMatrix();
 			// shape that represents the new enter
@@ -171,7 +168,7 @@ public class Shape {
 			app.shape(s);
 			app.popMatrix();
 		} else {
-			//app.fill(255);
+			// app.fill(255);
 			app.noStroke();
 			app.pushMatrix();
 			// shape that represents the new enter
@@ -234,13 +231,16 @@ public class Shape {
 		}
 		app.endShape(PConstants.CLOSE);
 	}
-	
-	public boolean getIsMarried(){
-		
+
+	public boolean getIsMarried() {
 		return isMarried;
 	}
 	
 	public void setIsMarried(boolean value){
+		isMarried = value;
+	}
+
+	public void setIsMarried(boolean value) {
 		isMarried = value;
 	}
 
