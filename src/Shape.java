@@ -20,6 +20,8 @@ public class Shape {
 	float rad; // radius for the shape
 	PVector head;
 	PVector spineBase;
+	PVector shoulderL;
+	PVector shoulderR;
 
 	boolean morphing = false;
 	boolean isSquare = true;
@@ -50,6 +52,8 @@ public class Shape {
 		this.morphing = morphing;
 		head = body.getJoint(Body.HEAD);
 		spineBase = body.getJoint(Body.SPINE_BASE);
+		shoulderR = body.getJoint(Body.SHOULDER_RIGHT);
+		shoulderL = body.getJoint(Body.SHOULDER_LEFT);
 		if (head != null && spineBase != null) {
 			centerX = spineBase.x;
 			centerY = spineBase.y;
@@ -113,12 +117,19 @@ public class Shape {
 	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
 	public void halfHeart(boolean isLeft) {
 		app.smooth();
-		app.fill(255);
+		//app.fill(255);
 		app.strokeWeight(1f);
 		app.pushMatrix();
 		// shape that represents the new enter
 		PShape s = app.createShape();
 		// draw relative to the center of this person
+		if (isLeft){
+			centerX = shoulderL.x - 0.05f; //change the coordinate a bit to adjust the heart shape
+			centerY = centerY - 0.2f;
+		} else{
+			centerX = shoulderR.x + 0.05f; //change the coordinate a bit to adjust the heart shape
+			centerY = centerY - 0.2f;
+		}
 		app.translate(centerX, centerY);
 		s.beginShape();
 		s.scale(.01f, .01f);
