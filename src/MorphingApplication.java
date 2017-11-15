@@ -21,6 +21,8 @@ public class MorphingApplication extends PApplet {
 
 	private Body body1;
 	private Body body2;
+	
+	boolean isApart = false;
 
 	public static float PROJECTOR_RATIO = 1080f / 1920.0f;
 
@@ -67,6 +69,7 @@ public class MorphingApplication extends PApplet {
 						body2 = b;
 					}
 					if (isClose(body1, body2)){
+						
 						//s.draw(1, new Color(232, 64, 170));
 					}
 				}
@@ -153,13 +156,21 @@ public class MorphingApplication extends PApplet {
 			//draw the heart
 			s1.draw(-1, new Color(232, 64, 170));
 			s2.draw(0, new Color(232, 64, 170));
+			isApart = true;
 			
 			return true;
 		}
 
-		//if two shapes are apart, just draw circle
-		s1.draw(1, new Color(232, 64, 170));
-		s2.draw(1, new Color(232, 64, 170));
+		if (isApart){
+			//if two shapes are apart, just draw circle
+			s1.draw(1, new Color(150, 0, 250));
+			s2.draw(1, new Color(150, 0, 250));
+			System.out.println("is apart flag");
+			isApart = false;
+		} else{
+			s1.draw(1, new Color(232, 64, 170));
+			s2.draw(1, new Color(232, 64, 170));
+		}
 		}
 		}
 		}
