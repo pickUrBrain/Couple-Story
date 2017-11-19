@@ -215,7 +215,7 @@ public class CoupleApplication extends PApplet {
 
 	}
 
-	public void settings() {
+	public void settings() {  
 		createWindow(true, true, .25f);
 	}
 
