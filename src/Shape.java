@@ -33,10 +33,6 @@ public class Shape {
 	boolean isMarried = false;
 	boolean isDivorced = false;
 
-	// float angle = 0;
-	// float aVelocity = 0;
-	// float aAcceleration = 0;
-
 	// store the vertices for two shapes assuming each shape has the same number of
 	// vertices
 	ArrayList<PVector> crclSet = new ArrayList<PVector>();
