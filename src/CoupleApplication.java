@@ -10,18 +10,12 @@ import java.io.*;
 
 public class CoupleApplication extends PApplet {
 
+	
 	int count = 0; // count of people
+
 	PApplet app;
-	// app.colorMode(PApplet.HSB);
-	// int color = color(random(255), 255, 255);
-	Color cRed = new Color(255, 0, 0);
-	Color cGreen = new Color(0, 255, 0);
-	Color cBlue = new Color(0, 0, 255);
-
-	HashMap<Long, Shape> shapes = new HashMap<Long, Shape>();
-
 	KinectBodyDataProvider kinectReader;
-
+	HashMap<Long, Shape> shapes = new HashMap<Long, Shape>();
 	PersonTracker tracker = new PersonTracker();
 
 	boolean isMorph = false;
@@ -117,8 +111,9 @@ public class CoupleApplication extends PApplet {
 
 				if (bodyL.getJoint(Body.SHOULDER_RIGHT) != null && bodyR.getJoint(Body.SHOULDER_LEFT) != null) {
 
-//					System.out.println(
-//							bodyL.getJoint(Body.SHOULDER_RIGHT).x + " body R: " + bodyR.getJoint(Body.SHOULDER_LEFT).x);
+					// System.out.println(
+					// bodyL.getJoint(Body.SHOULDER_RIGHT).x + " body R: " +
+					// bodyR.getJoint(Body.SHOULDER_LEFT).x);
 
 					// if two shapes are close enough
 					if (Math.abs(
@@ -138,8 +133,8 @@ public class CoupleApplication extends PApplet {
 								s1.setIsMarried(true);
 								s2.setIsMarried(true);
 								if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x)
-									- (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.27)
-								married = true;
+										- (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.27)
+									married = true;
 								playMusic = false;
 							}
 						}

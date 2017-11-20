@@ -1,9 +1,7 @@
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.HashSet;
 
-import javafx.scene.shape.Circle;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PShape;
@@ -11,8 +9,6 @@ import processing.core.PVector;
 
 /**
  * @author Crystal, Zhiling
- *         {@link https://processing.org/examples/regularpolygon.html}
- *         {@link https://processing.org/examples/morph.html}
  */
 public class Shape {
 
@@ -23,119 +19,146 @@ public class Shape {
 	float centerX;
 	float centerY;
 	float rad; // radius for the shape
+
 	PVector head;
 	PVector spineBase;
 	PVector shoulderL;
 	PVector shoulderR;
 
-	boolean morphing = false;
+	// boolean morphing = false;
+	// boolean isAlone = true;
 	boolean isSquare = true;
 	boolean isMarried = false;
 	boolean isDivorced = false;
 
+<<<<<<< HEAD
 	// store the vertices for two shapes assuming each shape has the same number of
 	// vertices
+=======
+	long timeBorn = System.currentTimeMillis();
+
+	// future featurs I want to implement
+	// float angle = 0;
+	// float aVelocity = 0;
+	// float aAcceleration = 0;
+
+	// keep tracking of exes
+	HashSet<Long> marriedTo = new HashSet<Long>();
+
+	// store the vertices for shapes
+>>>>>>> origin/master
 	ArrayList<PVector> crclSet = new ArrayList<PVector>();
 	ArrayList<PVector> sqrSet = new ArrayList<PVector>();
 	// store the vertices that been lerped to
 	ArrayList<PVector> morphSet = new ArrayList<PVector>();
 
-	ArrayList<PVector> traces = new ArrayList<PVector>();
+	// to store all the locations past by until meeting that married person
+	ArrayList<PVector> exTraces = new ArrayList<PVector>();
+	ArrayList<PVector> newTraces = new ArrayList<PVector>();
+
+	String text = "";
+	public static final Color BABY_PINK = new Color(255, 182, 193);
+	public static final Color HOT_PINK = new Color(255, 105, 180);
+	public static final Color BLUE = new Color(168, 111, 186);
+	public static final Color RED = new Color(232, 64, 170);
+	public static final Color pureRed = new Color(255, 0, 0);
+	public static final Color pureGreen = new Color(0, 255, 0);
+	public static final Color pureBlue = new Color(0, 0, 255);
 
 	public Shape(PApplet app) {
 		this.app = app;
-		app.colorMode(PApplet.HSB);
-		color = app.color(app.random(255), 255, 255);
+		// initialization for vertices set
 		initCircle();
 		initSquare();
 	}
 
-	public void update(Body body, boolean morphing, boolean isSquare) {
+	public void gradientColor(int c1, int c2) {
+
+	}
+
+	public void update(Body body, boolean isMarried, long partnerId, boolean isDivorced) {
 		this.body = body;
-		this.morphing = morphing;
 		head = body.getJoint(Body.HEAD);
 		spineBase = body.getJoint(Body.SPINE_BASE);
-		shoulderR = body.getJoint(Body.SHOULDER_RIGHT);
-		shoulderL = body.getJoint(Body.SHOULDER_LEFT);
 		if (head != null && spineBase != null) {
 			centerX = spineBase.x;
 			centerY = spineBase.y;
-			// the Euclidean distance between two points
-			rad = Math.abs(head.dist(spineBase)) / 2f;
-			traces.add(new PVector(centerX, centerY));
+		}
+
+		// if married stated
+		if (isMarried) {
+			text = "We fall in love!";
+			newTraces.add(new PVector(centerX, centerY));
+			if (newTraces.size() > 20) // have been together for a long time
+				text = "I love you so much.";
+			if (newTraces.size() > 80) // have been together for a long long time
+				text = "I love you so so much.";
+			// just got married
+			if (this.isMarried != isMarried) {
+				this.isDivorced = false;
+				// if never married to this person
+				if (!marriedTo.contains(partnerId)) {
+					marriedTo.add(partnerId);
+					newTraces = new ArrayList<PVector>();
+				} else // married to the same person again
+					text = "Can't believe we fall in love again!"; // override the displaying text
+			}
+		} else if (isDivorced) {
+			if (newTraces.size() <= 10) // Just break up
+				text = "We should take a break.";
+			else // return to the game
+				text = "Single.";
+			// just got divorced
+			if (this.isDivorced != isDivorced) {
+				this.isDivorced = isDivorced;
+				this.isMarried = false;
+				// remember all the traces being together
+				exTraces = newTraces;
+				newTraces = new ArrayList<PVector>(); // record new traces until meeting the next partner
+			}
+			newTraces.add(new PVector(centerX, centerY));
 		}
 	}
 
-	public void draw(int state, Color color) {
-		// app.fill(color.getRGB());
-		// brokenHeart(crclSet);
+	public void draw(int state) {
 		switch (state) {
-		case -1:
-			app.fill(color.getRGB());
-			halfHeart(true); // left heart
+		case -1: // married, left person
+			// double check
+			if (isMarried && !isDivorced) {
+				// should genetrate random color?
+				app.fill(BABY_PINK.getRGB());
+				halfHeart(true); // left heart
+			} else
+				System.out.println("Left heart should be displayed");
 			break;
-		case 0:
-			app.fill(color.getRGB());
-			halfHeart(false); // right heart
+		case 0: // married, right person
+			if (isMarried && !isDivorced) {
+				app.fill(HOT_PINK.getRGB());
+				halfHeart(false); // left heart
+			} else
+				System.out.println("Left heart should be displayed");
 			break;
-		case 1:
-			app.fill(color.getRGB());
-			morph(crclSet);
+		case 1: // is alone
+			app.fill(BLUE.getRGB());
+			morph(sqrSet); //
 			break;
-		case 2:
-			app.fill(color.getRGB());
-			morph(sqrSet);
+		case 2: // more than one person
+			if (!isMarried || isDivorced) { // single
+				app.fill(BABY_PINK.getRGB());
+				morph(crclSet);
+			}
 			break;
 		case 3:
-			app.fill(color.getRGB());
-			morph(crclSet);
+			if (isDivorced && !isMarried) {
+				app.fill(BLUE.getRGB());
+				morph(crclSet);
+				breakUp(); // display traces until meeting ex
+			}
 			break;
-		case 4:
-			app.fill(color.getRGB());
-			broken();
-			break;
 		}
 	}
 
-	public void broken() {
-		app.strokeWeight((float) 0.01);
-		for (int i = 1; i < traces.size(); i++) {
-			float val = (float) (i / traces.size() * 204.0 + 51);
-			app.stroke(val);
-			app.line(traces.get(i - 1).x, traces.get(i - 1).y, traces.get(i).x, traces.get(i).y);
-		}
-	}
-
-	public void morph(ArrayList<PVector> vertices) {
-		// Look at each vertex
-		for (int i = 0; i < crclSet.size(); i++) {
-			PVector v1;
-			v1 = vertices.get(i);
-			// Get the vertex we will draw
-			PVector v2 = morphSet.get(i);
-			// Lerp to the target
-			v2.lerp(v1, (float) 0.05);
-		}
-		app.noStroke();
-		app.pushMatrix();
-		// shape that represents the new enter
-		PShape s = app.createShape();
-		// draw relative to the center of this person
-		app.translate(centerX, centerY);
-		s.beginShape();
-		s.scale(.01f, .01f);
-		// shape drawing
-		for (PVector v : morphSet)
-			s.vertex(v.x, v.y);
-		s.endShape(PApplet.CLOSE);
-		// create this shape in its parent pApplet
-		app.shape(s);
-		app.popMatrix();
-	}
-
-	// https://www.khanacademy.org/computer-programming/beziervertexcx1-cy1-cx2-cy2-x-y-processingjs/5085481683386368
 	public void halfHeart(boolean isLeft) {
-		
 		app.smooth();
 		app.strokeWeight(1f);
 		app.pushMatrix();
@@ -167,9 +190,84 @@ public class Shape {
 		app.popMatrix();
 	}
 
+	// https://processing.org/examples/morph.html
+	public void morph(ArrayList<PVector> vertices) {
+		// Look at each vertex
+		for (int i = 0; i < crclSet.size(); i++) {
+			PVector v1;
+			v1 = vertices.get(i);
+			// Get the vertex we will draw
+			PVector v2 = morphSet.get(i);
+			// Lerp to the target
+			v2.lerp(v1, (float) 0.05);
+		}
+		app.noStroke();
+		app.pushMatrix();
+		// shape that represents the new enter
+		PShape s = app.createShape();
+		// draw relative to the center of this person
+		app.translate(centerX, centerY);
+		s.beginShape();
+		s.scale(.01f, .01f);
+		// shape drawing
+		for (PVector v : morphSet)
+			s.vertex(v.x, v.y);
+		s.endShape(PApplet.CLOSE);
+		// create this shape in its parent pApplet
+		app.shape(s);
+		app.popMatrix();
+	}
+
+	public void breakUp() {
+		// if not getting a break up or is married, should not display any traces
+		if (!isDivorced || isMarried)
+			return;
+		app.strokeWeight((float) 0.02);
+		for (int i = 1; i < exTraces.size(); i++) {
+			float val = (float) (i / exTraces.size() * 204.0 + 51);
+			app.stroke(val);
+			app.line(exTraces.get(i - 1).x, exTraces.get(i - 1).y, exTraces.get(i).x, exTraces.get(i).y);
+		}
+	}
+
+	/**
+	 * Creates a circle using vectors pointing from center
+	 */
+	public void initCircle() {
+		for (int angle = 0; angle < 360; angle += 9) {
+			// Note we are not starting from 0 in order to match the
+			// path of a circle.
+			PVector v = PVector.fromAngle(PApplet.radians(angle - 135));
+			v.mult(15);
+			crclSet.add(v);
+			// fill out morph ArrayList with blank PVectors
+			morphSet.add(new PVector());
+		}
+	}
+
+	/**
+	 * Creates a square by using a bunch of vertices along straight lines
+	 */
+	public void initSquare() {
+		// Top of square
+		for (int x = -20; x < 20; x += 4)
+			sqrSet.add(new PVector(x, -20));
+		// Right side
+		for (int y = -20; y < 20; y += 4)
+			sqrSet.add(new PVector(20, y));
+		// Bottom
+		for (int x = 20; x > -20; x -= 4)
+			sqrSet.add(new PVector(x, 20));
+		// Left side
+		for (int y = 20; y > -20; y -= 4)
+			sqrSet.add(new PVector(-20, y));
+	}
+
+	/**
+	 * Status to be used in case booleans are not dected fine
+	 */
 	public void statusQuo() {
 		if (isSquare) {
-
 			app.noStroke();
 			app.pushMatrix();
 			// shape that represents the new enter
@@ -206,38 +304,10 @@ public class Shape {
 	}
 
 	/**
-	 * Creates a circle using vectors pointing from center
+	 * For future use, if use different polygons to represent one's state in society
+	 * 
+	 * @param npoints
 	 */
-	public void initCircle() {
-		for (int angle = 0; angle < 360; angle += 9) {
-			// Note we are not starting from 0 in order to match the
-			// path of a circle.
-			PVector v = PVector.fromAngle(PApplet.radians(angle - 135));
-			v.mult(15);
-			crclSet.add(v);
-			// fill out morph ArrayList with blank PVectors
-			morphSet.add(new PVector());
-		}
-	}
-
-	/**
-	 * Creates a square by using a bunch of vertices along straight lines
-	 */
-	public void initSquare() {
-		// Top of square
-		for (int x = -20; x < 20; x += 4)
-			sqrSet.add(new PVector(x, -20));
-		// Right side
-		for (int y = -20; y < 20; y += 4)
-			sqrSet.add(new PVector(20, y));
-		// Bottom
-		for (int x = 20; x > -20; x -= 4)
-			sqrSet.add(new PVector(x, 20));
-		// Left side
-		for (int y = 20; y > -20; y -= 4)
-			sqrSet.add(new PVector(-20, y));
-	}
-
 	public void regPolygon(int npoints) {
 		float angle = PConstants.TWO_PI / npoints;
 		app.beginShape();

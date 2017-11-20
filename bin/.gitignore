@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /Body.class
 /CoupleApplication.class
 /KinectBodyData.class
@@ -13,3 +14,8 @@
 /UDPPlayer.class
 /UDPReceiver.class
 /UDPRecorder.class
+=======
+/Shape$COLOR_STATE.class
+/Shape$Colors.class
+/Shape$COLOR.class
+>>>>>>> origin/master
