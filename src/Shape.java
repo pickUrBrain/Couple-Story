@@ -31,10 +31,9 @@ public class Shape {
 	boolean isMarried = false;
 	boolean isDivorced = false;
 
-<<<<<<< HEAD
-	// store the vertices for two shapes assuming each shape has the same number of
+	// store the vertices for two shapes assuming each shape has the same number
+	// of
 	// vertices
-=======
 	long timeBorn = System.currentTimeMillis();
 
 	// future featurs I want to implement
@@ -46,7 +45,6 @@ public class Shape {
 	HashSet<Long> marriedTo = new HashSet<Long>();
 
 	// store the vertices for shapes
->>>>>>> origin/master
 	ArrayList<PVector> crclSet = new ArrayList<PVector>();
 	ArrayList<PVector> sqrSet = new ArrayList<PVector>();
 	// store the vertices that been lerped to
@@ -64,6 +62,8 @@ public class Shape {
 	public static final Color pureRed = new Color(255, 0, 0);
 	public static final Color pureGreen = new Color(0, 255, 0);
 	public static final Color pureBlue = new Color(0, 0, 255);
+	public static final Color WHITE = new Color(255, 255, 255);
+	
 
 	public Shape(PApplet app) {
 		this.app = app;
@@ -76,32 +76,47 @@ public class Shape {
 
 	}
 
-	public void update(Body body, boolean isMarried, long partnerId, boolean isDivorced) {
+	// don't really see the point of isMarried, isDivorced parameter
+	public void update(Body body, boolean isMarried, Body body2, boolean isDivorced) {
 		this.body = body;
 		head = body.getJoint(Body.HEAD);
 		spineBase = body.getJoint(Body.SPINE_BASE);
+		shoulderL = body.getJoint(Body.SHOULDER_LEFT);
+		shoulderR = body.getJoint(Body.SHOULDER_RIGHT);
+
 		if (head != null && spineBase != null) {
 			centerX = spineBase.x;
 			centerY = spineBase.y;
+
 		}
 
+		exTraces.add(new PVector(centerX, centerY));
+		
+		// Long partnerId = new Long (partner.getId());
 		// if married stated
 		if (isMarried) {
 			text = "We fall in love!";
 			newTraces.add(new PVector(centerX, centerY));
 			if (newTraces.size() > 20) // have been together for a long time
 				text = "I love you so much.";
-			if (newTraces.size() > 80) // have been together for a long long time
+			if (newTraces.size() > 80) // have been together for a long long
+										// time
 				text = "I love you so so much.";
 			// just got married
 			if (this.isMarried != isMarried) {
 				this.isDivorced = false;
 				// if never married to this person
-				if (!marriedTo.contains(partnerId)) {
-					marriedTo.add(partnerId);
-					newTraces = new ArrayList<PVector>();
+				if (body2 != null) {
+					long partnerId = body2.getId();
+					if (!marriedTo.contains(partnerId)) {
+						marriedTo.add(partnerId);
+						newTraces = new ArrayList<PVector>();
+					}
 				} else // married to the same person again
-					text = "Can't believe we fall in love again!"; // override the displaying text
+					text = "Can't believe we fall in love again!"; // override
+																	// the
+																	// displaying
+																	// text
 			}
 		} else if (isDivorced) {
 			if (newTraces.size() <= 10) // Just break up
@@ -114,7 +129,9 @@ public class Shape {
 				this.isMarried = false;
 				// remember all the traces being together
 				exTraces = newTraces;
-				newTraces = new ArrayList<PVector>(); // record new traces until meeting the next partner
+				newTraces = new ArrayList<PVector>(); // record new traces until
+														// meeting the next
+														// partner
 			}
 			newTraces.add(new PVector(centerX, centerY));
 		}
@@ -124,36 +141,26 @@ public class Shape {
 		switch (state) {
 		case -1: // married, left person
 			// double check
-			if (isMarried && !isDivorced) {
-				// should genetrate random color?
-				app.fill(BABY_PINK.getRGB());
-				halfHeart(true); // left heart
-			} else
-				System.out.println("Left heart should be displayed");
+			app.fill(HOT_PINK.getRGB());
+			halfHeart(true); // left heart
 			break;
 		case 0: // married, right person
-			if (isMarried && !isDivorced) {
-				app.fill(HOT_PINK.getRGB());
-				halfHeart(false); // left heart
-			} else
-				System.out.println("Left heart should be displayed");
+			app.fill(HOT_PINK.getRGB());
+			halfHeart(false); // right heart
 			break;
 		case 1: // is alone
 			app.fill(BLUE.getRGB());
 			morph(sqrSet); //
 			break;
 		case 2: // more than one person
-			if (!isMarried || isDivorced) { // single
-				app.fill(BABY_PINK.getRGB());
-				morph(crclSet);
-			}
+			app.fill(BABY_PINK.getRGB());
+			morph(crclSet);
 			break;
 		case 3:
-			if (isDivorced && !isMarried) {
-				app.fill(BLUE.getRGB());
-				morph(crclSet);
-				breakUp(); // display traces until meeting ex
-			}
+			app.fill(BABY_PINK.getRGB());
+			morph(crclSet);
+			
+			breakUp(); // display traces until meeting ex
 			break;
 		}
 	}
@@ -166,10 +173,14 @@ public class Shape {
 		PShape s = app.createShape();
 		// draw relative to the center of this person
 		if (isLeft) {
-			centerX = shoulderL.x - 0.05f; // change the coordinate a bit to adjust the heart shape
+			if (shoulderL != null)
+				centerX = shoulderL.x - 0.05f; // change the coordinate a bit to
+												// adjust the heart shape
 			// centerY = centerY - 0.2f;
 		} else {
-			centerX = shoulderR.x + 0.05f; // change the coordinate a bit to adjust the heart shape
+			if (shoulderR != null)
+				centerX = shoulderR.x + 0.05f; // change the coordinate a bit to
+												// adjust the heart shape
 			// centerY = centerY - 0.2f;
 		}
 		app.translate(centerX, centerY);
@@ -219,10 +230,10 @@ public class Shape {
 	}
 
 	public void breakUp() {
-		// if not getting a break up or is married, should not display any traces
-		if (!isDivorced || isMarried)
-			return;
+		// if not getting a break up or is married, should not display any
+		// traces
 		app.strokeWeight((float) 0.02);
+		app.fill(WHITE.getRGB());
 		for (int i = 1; i < exTraces.size(); i++) {
 			float val = (float) (i / exTraces.size() * 204.0 + 51);
 			app.stroke(val);
@@ -304,7 +315,8 @@ public class Shape {
 	}
 
 	/**
-	 * For future use, if use different polygons to represent one's state in society
+	 * For future use, if use different polygons to represent one's state in
+	 * society
 	 * 
 	 * @param npoints
 	 */
@@ -325,6 +337,7 @@ public class Shape {
 
 	public void setIsMarried(boolean value) {
 		isMarried = value;
+		exTraces = new ArrayList<PVector>();
 	}
 
 	public boolean getIsDivorced() {
@@ -333,6 +346,16 @@ public class Shape {
 
 	public void setIsDivorced(boolean value) {
 		isDivorced = value;
+	}
+
+	public void updateLocation(Body body) {
+		this.body = body;
+		head = body.getJoint(Body.HEAD);
+		spineBase = body.getJoint(Body.SPINE_BASE);
+		if (head != null && spineBase != null) {
+			centerX = spineBase.x;
+			centerY = spineBase.y;
+		}
 	}
 
 }

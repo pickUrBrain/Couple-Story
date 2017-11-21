@@ -10,7 +10,6 @@ import java.io.*;
 
 public class CoupleApplication extends PApplet {
 
-	
 	int count = 0; // count of people
 
 	PApplet app;
@@ -25,6 +24,8 @@ public class CoupleApplication extends PApplet {
 
 	private Body body1;
 	private Body body2;
+	private Body bodyL;
+	private Body bodyR;
 
 	public static float PROJECTOR_RATIO = 1080f / 1920.0f;
 
@@ -55,45 +56,56 @@ public class CoupleApplication extends PApplet {
 			body1 = null;
 			body2 = null;
 			isSquare = false;
-		} else if (numPeople == 1)
+		} else if (numPeople == 1) {
 			isSquare = true;
+			married = false;
+		}
+
+		float closeDistance = Float.MAX_VALUE;
 
 		for (Body b : tracker.getPeople().values()) {
 			Shape s = shapes.get(b.getId());
 			if (s != null) {
-				s.update(b, isMorph, isSquare); // if there's any changes in
-												// number of ppl, change morph
-												// true
-				// if there's two people, change isSquare to false
 
 				if (numPeople == 1) {
-					s.draw(2, new Color(51, 171, 249));
 					body1 = b;
+					s.updateLocation(body1);
+					s.draw(1);
+				}
 
-				} else if (numPeople >= 2) {
-					if (body1 == null) {
-						body1 = b;
-					} else {
-						body2 = b;
+				else {
+					// go through other partners
+					for (Body p : tracker.getPeople().values()) {
+
+						// if found possible partners,
+						if (p != b) {
+							if (closeDistance > isClose(b, p)) {
+								closeDistance = isClose(b, p);
+								//body1 = b;
+								body2 = p;
+							}
+						}
 					}
-					if (isClose(body1, body2)) {
-						System.out.println(body1.getId() + "body 2: " + body2.getId());
-						// s.draw(1, new Color(232, 64, 170));
+					
+					//if there is already couple that is married, skip the body
+
+					s.update(b, s.getIsMarried(), body2, s.getIsDivorced());
+					if (closeDistance < 0.8) {
+						drawHeart(bodyL, bodyR);
+					} else {
+						drawCircle(bodyL, bodyR);
 					}
 				}
+
 			}
 		}
 	}
 
-	public boolean isClose(Body b1, Body b2) {
+	public float isClose(Body b1, Body b2) {
 
-		Body bodyL;
-		Body bodyR;
+		float result = Float.MAX_VALUE;
 
 		if (b1 != null && b2 != null) {
-
-			Shape s1 = shapes.get(b1.getId());
-			Shape s2 = shapes.get(b2.getId());
 
 			PVector p1 = b1.getJoint(Body.SPINE_BASE);
 			PVector p2 = b2.getJoint(Body.SPINE_BASE);
@@ -101,7 +113,6 @@ public class CoupleApplication extends PApplet {
 			if (p1 != null && p2 != null) {
 
 				if (p2.x < p1.x) {
-					System.out.println("CHECK");
 					bodyR = b1;
 					bodyL = b2;
 				} else {
@@ -111,64 +122,62 @@ public class CoupleApplication extends PApplet {
 
 				if (bodyL.getJoint(Body.SHOULDER_RIGHT) != null && bodyR.getJoint(Body.SHOULDER_LEFT) != null) {
 
-					// System.out.println(
-					// bodyL.getJoint(Body.SHOULDER_RIGHT).x + " body R: " +
-					// bodyR.getJoint(Body.SHOULDER_LEFT).x);
-
-					// if two shapes are close enough
-					if (Math.abs(
-							(bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.8) {
-
-						s1 = shapes.get(bodyL.getId());
-						s2 = shapes.get(bodyR.getId());
-
-						if (!s1.isDivorced && !s2.isDivorced) {
-
-							// draw the heart
-							s1.draw(0, new Color(232, 64, 170));
-							s2.draw(-1, new Color(232, 64, 170));
-
-							if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x)
-									- (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.3 && !s1.isMarried && !s2.isMarried) {
-								s1.setIsMarried(true);
-								s2.setIsMarried(true);
-								if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x)
-										- (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.27)
-									married = true;
-								playMusic = false;
-							}
-						}
-						return true;
-					}
-
-					// if the shape is married before, we're never getting back
-
-					if (s1.isMarried && s2.isMarried) {
-						// change the gradient color
-						s1.draw(1, new Color(232, 64, 170));
-						s2.draw(1, new Color(232, 64, 170));
-						s1.setIsMarried(false);
-						s2.setIsMarried(false);
-						s1.setIsDivorced(true);
-						s2.setIsDivorced(true);
-						married = false;
-					} else if (s1.isDivorced && s2.isDivorced) {
-						s1.draw(4, new Color(168, 111, 186));
-						s2.draw(4, new Color(168, 111, 186));
-						married = false;
-						System.out.println("PLAY MUSIC");
-						if (!playMusic)
-							playMusic();
-					} else {
-						// if two shapes are apart, just draw circle
-						s1.draw(1, new Color(232, 64, 170));
-						s2.draw(1, new Color(232, 64, 170));
-						married = false;
-					}
+					result = Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x));
+					System.out.println("result " + result);
 				}
 			}
 		}
-		return false;
+		return result;
+	}
+
+	public void drawHeart(Body bodyL, Body bodyR) {
+
+		Shape s1 = shapes.get(bodyL.getId());
+		Shape s2 = shapes.get(bodyR.getId());
+
+		//if (!s1.getIsDivorced() && !s2.getIsDivorced()) {
+
+			// draw the heart
+			s1.draw(0);
+			s2.draw(-1);
+
+			if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.3
+					&& !s1.isMarried && !s2.isMarried) {
+				s1.setIsMarried(true);
+				s2.setIsMarried(true);
+				married = true;
+				playMusic = false;
+			}
+		//}
+
+	}
+
+	public void drawCircle(Body bodyL, Body bodyR) {
+
+		Shape s1 = shapes.get(bodyL.getId());
+		Shape s2 = shapes.get(bodyR.getId());
+
+		// if the shape is married before, we're never getting back
+
+		if (s1.isMarried && s2.isMarried) {
+			// draw circle
+			s1.draw(2);
+			s2.draw(2);
+			s1.setIsMarried(false);
+			s2.setIsMarried(false);
+			s1.setIsDivorced(true);
+			s2.setIsDivorced(true);
+		} else if (s1.isDivorced && s2.isDivorced) {
+			s1.draw(3);
+			s2.draw(3);
+			// if (!playMusic)
+			// playMusic();
+		} else {
+			// if two shapes are apart, just draw circle
+			s1.draw(2);
+			s2.draw(2);
+		}
+		married = false;
 	}
 
 	public void playMusic() {
@@ -199,19 +208,19 @@ public class CoupleApplication extends PApplet {
 		/*
 		 * use this code to run your PApplet from data recorded by UPDRecorder
 		 */
-		// try {
-		// kinectReader = new KinectBodyDataProvider("exitTest.kinect", 2);
-		// } catch (IOException e) {
-		// System.out.println("Unable to create kinect producer");
-		// }
+		 try {
+		 kinectReader = new KinectBodyDataProvider("demo.kinect", 2);
+		 } catch (IOException e) {
+		 System.out.println("Unable to create kinect producer");
+		 }
 
-		kinectReader = new KinectBodyDataProvider(8008);
+		//kinectReader = new KinectBodyDataProvider(8008);
 		kinectReader.start();
 
 	}
 
 	public void settings() {
-		createWindow(true, true, .25f);
+		createWindow(true, false, .25f);
 	}
 
 	public void createWindow(boolean useP2D, boolean isFullscreen, float windowsScale) {
