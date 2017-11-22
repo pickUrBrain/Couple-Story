@@ -1,9 +1,7 @@
-import java.awt.Color;
 import java.io.IOException;
 import java.util.HashMap;
 
 import processing.core.PApplet;
-import processing.core.PImage;
 import processing.core.PVector;
 import sun.audio.*;
 import java.io.*;
@@ -41,6 +39,7 @@ public class CoupleApplication extends PApplet {
 		// KinectBodyData bodyData = kinectReader.getData();
 		KinectBodyData bodyData = kinectReader.getMostRecentData();
 		tracker.update(bodyData);
+
 		isMorph = tracker.getMorph();
 
 		for (Long id : tracker.getEnters()) {
@@ -81,13 +80,13 @@ public class CoupleApplication extends PApplet {
 						if (p != b) {
 							if (closeDistance > isClose(b, p)) {
 								closeDistance = isClose(b, p);
-								//body1 = b;
+								// body1 = b;
 								body2 = p;
 							}
 						}
 					}
-					
-					//if there is already couple that is married, skip the body
+
+					// if there is already couple that is married, skip the body
 
 					s.update(b, s.getIsMarried(), body2, s.getIsDivorced());
 					if (closeDistance < 0.8) {
@@ -135,20 +134,20 @@ public class CoupleApplication extends PApplet {
 		Shape s1 = shapes.get(bodyL.getId());
 		Shape s2 = shapes.get(bodyR.getId());
 
-		//if (!s1.getIsDivorced() && !s2.getIsDivorced()) {
+		// if (!s1.getIsDivorced() && !s2.getIsDivorced()) {
 
-			// draw the heart
-			s1.draw(0);
-			s2.draw(-1);
+		// draw the heart
+		s1.draw(0);
+		s2.draw(-1);
 
-			if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.3
-					&& !s1.isMarried && !s2.isMarried) {
-				s1.setIsMarried(true);
-				s2.setIsMarried(true);
-				married = true;
-				playMusic = false;
-			}
-		//}
+		if (Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x)) < 0.3
+				&& !s1.isMarried && !s2.isMarried) {
+			s1.setIsMarried(true);
+			s2.setIsMarried(true);
+			married = true;
+			playMusic = false;
+		}
+		// }
 
 	}
 
@@ -208,13 +207,13 @@ public class CoupleApplication extends PApplet {
 		/*
 		 * use this code to run your PApplet from data recorded by UPDRecorder
 		 */
-		 try {
-		 kinectReader = new KinectBodyDataProvider("demo.kinect", 2);
-		 } catch (IOException e) {
-		 System.out.println("Unable to create kinect producer");
-		 }
+		try {
+			kinectReader = new KinectBodyDataProvider("exitTest.kinect", 1);
+		} catch (IOException e) {
+			System.out.println("Unable to create kinect producer");
+		}
 
-		//kinectReader = new KinectBodyDataProvider(8008);
+		// kinectReader = new KinectBodyDataProvider(8008);
 		kinectReader.start();
 
 	}

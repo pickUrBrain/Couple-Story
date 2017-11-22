@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PFont;
 import processing.core.PShape;
 import processing.core.PVector;
 
@@ -25,16 +26,8 @@ public class Shape {
 	PVector shoulderL;
 	PVector shoulderR;
 
-	// boolean morphing = false;
-	// boolean isAlone = true;
-	boolean isSquare = true;
 	boolean isMarried = false;
 	boolean isDivorced = false;
-
-	// store the vertices for two shapes assuming each shape has the same number
-	// of
-	// vertices
-	long timeBorn = System.currentTimeMillis();
 
 	// future featurs I want to implement
 	// float angle = 0;
@@ -54,7 +47,7 @@ public class Shape {
 	ArrayList<PVector> exTraces = new ArrayList<PVector>();
 	ArrayList<PVector> newTraces = new ArrayList<PVector>();
 
-	String text = "";
+	String text = ""; // future implementations: text to display status
 	public static final Color BABY_PINK = new Color(255, 182, 193);
 	public static final Color HOT_PINK = new Color(255, 105, 180);
 	public static final Color BLUE = new Color(168, 111, 186);
@@ -63,17 +56,12 @@ public class Shape {
 	public static final Color pureGreen = new Color(0, 255, 0);
 	public static final Color pureBlue = new Color(0, 0, 255);
 	public static final Color WHITE = new Color(255, 255, 255);
-	
 
 	public Shape(PApplet app) {
 		this.app = app;
 		// initialization for vertices set
 		initCircle();
 		initSquare();
-	}
-
-	public void gradientColor(int c1, int c2) {
-
 	}
 
 	// don't really see the point of isMarried, isDivorced parameter
@@ -87,11 +75,10 @@ public class Shape {
 		if (head != null && spineBase != null) {
 			centerX = spineBase.x;
 			centerY = spineBase.y;
-
 		}
 
-		exTraces.add(new PVector(centerX, centerY));
-		
+		newTraces.add(new PVector(centerX, centerY));
+
 		// Long partnerId = new Long (partner.getId());
 		// if married stated
 		if (isMarried) {
@@ -135,12 +122,20 @@ public class Shape {
 			}
 			newTraces.add(new PVector(centerX, centerY));
 		}
+
 	}
 
+	/**
+	 * Draws relative shape
+	 * 
+	 * @param state
+	 */
 	public void draw(int state) {
+		if (isDivorced)
+			breakUp(); // display traces of meeting ex
+
 		switch (state) {
 		case -1: // married, left person
-			// double check
 			app.fill(HOT_PINK.getRGB());
 			halfHeart(true); // left heart
 			break;
@@ -159,15 +154,17 @@ public class Shape {
 		case 3:
 			app.fill(BABY_PINK.getRGB());
 			morph(crclSet);
-			
-			breakUp(); // display traces until meeting ex
 			break;
 		}
 	}
 
+	/**
+	 * Displays broken heart
+	 * 
+	 * @param isLeft
+	 */
 	public void halfHeart(boolean isLeft) {
 		app.smooth();
-		app.strokeWeight(1f);
 		app.pushMatrix();
 		// shape that represents the new enter
 		PShape s = app.createShape();
@@ -201,7 +198,11 @@ public class Shape {
 		app.popMatrix();
 	}
 
-	// https://processing.org/examples/morph.html
+	/**
+	 * Morphing bewteen circle and square https://processing.org/examples/morph.html
+	 * 
+	 * @param vertices
+	 */
 	public void morph(ArrayList<PVector> vertices) {
 		// Look at each vertex
 		for (int i = 0; i < crclSet.size(); i++) {
@@ -219,6 +220,7 @@ public class Shape {
 		// draw relative to the center of this person
 		app.translate(centerX, centerY);
 		s.beginShape();
+		app.fill(BABY_PINK.getRGB());
 		s.scale(.01f, .01f);
 		// shape drawing
 		for (PVector v : morphSet)
@@ -229,14 +231,14 @@ public class Shape {
 		app.popMatrix();
 	}
 
+	/**
+	 * Displays the traces until meeting that ex
+	 */
 	public void breakUp() {
-		// if not getting a break up or is married, should not display any
-		// traces
 		app.strokeWeight((float) 0.02);
-		app.fill(WHITE.getRGB());
 		for (int i = 1; i < exTraces.size(); i++) {
-			float val = (float) (i / exTraces.size() * 204.0 + 51);
-			app.stroke(val);
+			// float val = (float) (i / exTraces.size() * 204.0 + 51);
+			app.stroke(255, 255, 255);
 			app.line(exTraces.get(i - 1).x, exTraces.get(i - 1).y, exTraces.get(i).x, exTraces.get(i).y);
 		}
 	}
@@ -275,48 +277,7 @@ public class Shape {
 	}
 
 	/**
-	 * Status to be used in case booleans are not dected fine
-	 */
-	public void statusQuo() {
-		if (isSquare) {
-			app.noStroke();
-			app.pushMatrix();
-			// shape that represents the new enter
-			PShape s = app.createShape();
-			// draw relative to the center of this person
-			app.translate(centerX, centerY);
-			s.beginShape();
-			s.scale(.01f, .01f);
-			// shape drawing
-			for (PVector v : sqrSet)
-				s.vertex(v.x, v.y);
-			s.endShape(PApplet.CLOSE);
-			// create this shape in its parent pApplet
-			app.shape(s);
-			app.popMatrix();
-		} else {
-			app.noStroke();
-			app.pushMatrix();
-			// shape that represents the new enter
-			PShape s = app.createShape();
-			// draw relative to the center of this person
-			app.translate(centerX, centerY);
-			s.beginShape();
-			s.scale(.01f, .01f);
-			// shape drawing
-			for (PVector v : crclSet)
-				s.vertex(v.x, v.y);
-			s.endShape(PApplet.CLOSE);
-			// create this shape in its parent pApplet
-			app.shape(s);
-			app.popMatrix();
-		}
-
-	}
-
-	/**
-	 * For future use, if use different polygons to represent one's state in
-	 * society
+	 * For future use, if use different polygons to represent one's state in society
 	 * 
 	 * @param npoints
 	 */
@@ -337,7 +298,7 @@ public class Shape {
 
 	public void setIsMarried(boolean value) {
 		isMarried = value;
-		exTraces = new ArrayList<PVector>();
+
 	}
 
 	public boolean getIsDivorced() {
@@ -346,6 +307,8 @@ public class Shape {
 
 	public void setIsDivorced(boolean value) {
 		isDivorced = value;
+		exTraces = newTraces;
+		newTraces = new ArrayList<PVector>();
 	}
 
 	public void updateLocation(Body body) {
