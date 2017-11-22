@@ -209,7 +209,7 @@ public class CoupleApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("exitTest.kinect", 1);
+			kinectReader = new KinectBodyDataProvider("demo.kinect", 1);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		}
