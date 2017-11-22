@@ -12,4 +12,7 @@ But things also change. If two people get further away from each other, their re
 - Run the CoupleApplication class, which holds main method.
 - People can enter in and out of the space, and stand apart and close together in order to perceive the changes.
 
-![gif1](https://github.com/hu-zhiling-540/Couple-Story/blob/master/enter2nd.gif "2nd person enters")
+![gif1](https://github.com/hu-zhiling-540/Couple-Story/blob/master/enter1st.gif "1st person enters")
+![gif2](https://github.com/hu-zhiling-540/Couple-Story/blob/master/enter2nd.gif "2nd person enters")
+![gif3](https://github.com/hu-zhiling-540/Couple-Story/blob/master/marry.gif "marry")
+![gif4](https://github.com/hu-zhiling-540/Couple-Story/blob/master/break%20up.gif "break up")
