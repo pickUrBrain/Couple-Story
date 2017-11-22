@@ -8,8 +8,6 @@ As individuals, we have distinctive personality. We are born with edges. That’
 But things also change. If two people get further away from each other, their relationship comes to an end. The break up, and return what they have been before. Their traces of life towards meeting ex will be displayed, as they’ve been through an important part of self-recognition. Until they find another person to engaged in a new relationship. It’s another couple’s story.
 
 ## Technical Details
-It expects typically two people in front of the camera.
-
-Run the CoupleApplication class, which holds main method.
-
-People can enter in and out of the space, and stand apart and close together in order to perceive the changes.
+- It expects typically two people in front of the camera.
+- Run the CoupleApplication class, which holds main method.
+- People can enter in and out of the space, and stand apart and close together in order to perceive the changes.
