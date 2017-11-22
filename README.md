@@ -11,3 +11,5 @@ But things also change. If two people get further away from each other, their re
 - It expects typically two people in front of the camera.
 - Run the CoupleApplication class, which holds main method.
 - People can enter in and out of the space, and stand apart and close together in order to perceive the changes.
+
+![gif1](https://github.com/hu-zhiling-540/Couple-Story/blob/master/enter2nd.gif "2nd person enters")
