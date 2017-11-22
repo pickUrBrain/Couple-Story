@@ -6,6 +6,10 @@ import processing.core.PVector;
 import sun.audio.*;
 import java.io.*;
 
+
+/**
+ * @author Crystal, Zhiling
+ */
 public class CoupleApplication extends PApplet {
 
 	int count = 0; // count of people
@@ -219,7 +223,7 @@ public class CoupleApplication extends PApplet {
 	}
 
 	public void settings() {
-		createWindow(true, false, .25f);
+		createWindow(true, true, .25f);
 	}
 
 	public void createWindow(boolean useP2D, boolean isFullscreen, float windowsScale) {

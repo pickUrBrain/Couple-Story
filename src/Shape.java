@@ -9,7 +9,7 @@ import processing.core.PShape;
 import processing.core.PVector;
 
 /**
- * @author Crystal, Zhiling
+ * @author Zhiling, Crystal
  */
 public class Shape {
 
@@ -34,8 +34,8 @@ public class Shape {
 	// float aVelocity = 0;
 	// float aAcceleration = 0;
 
-	// keep tracking of exes
-	HashSet<Long> marriedTo = new HashSet<Long>();
+	// keep tracking of exes for future implementation
+	// HashSet<Long> marriedTo = new HashSet<Long>();
 
 	// store the vertices for shapes
 	ArrayList<PVector> crclSet = new ArrayList<PVector>();
@@ -50,11 +50,7 @@ public class Shape {
 	String text = ""; // future implementations: text to display status
 	public static final Color BABY_PINK = new Color(255, 182, 193);
 	public static final Color HOT_PINK = new Color(255, 105, 180);
-	public static final Color BLUE = new Color(168, 111, 186);
-	public static final Color RED = new Color(232, 64, 170);
-	public static final Color pureRed = new Color(255, 0, 0);
-	public static final Color pureGreen = new Color(0, 255, 0);
-	public static final Color pureBlue = new Color(0, 0, 255);
+	public static final Color PURPLE = new Color(168, 111, 186);
 	public static final Color WHITE = new Color(255, 255, 255);
 
 	public Shape(PApplet app) {
@@ -64,7 +60,6 @@ public class Shape {
 		initSquare();
 	}
 
-	// don't really see the point of isMarried, isDivorced parameter
 	public void update(Body body, boolean isMarried, Body body2, boolean isDivorced) {
 		this.body = body;
 		head = body.getJoint(Body.HEAD);
@@ -76,53 +71,9 @@ public class Shape {
 			centerX = spineBase.x;
 			centerY = spineBase.y;
 		}
-
 		newTraces.add(new PVector(centerX, centerY));
-
-		// Long partnerId = new Long (partner.getId());
-		// if married stated
-		if (isMarried) {
-			text = "We fall in love!";
-			newTraces.add(new PVector(centerX, centerY));
-			if (newTraces.size() > 20) // have been together for a long time
-				text = "I love you so much.";
-			if (newTraces.size() > 80) // have been together for a long long
-										// time
-				text = "I love you so so much.";
-			// just got married
-			if (this.isMarried != isMarried) {
-				this.isDivorced = false;
-				// if never married to this person
-				if (body2 != null) {
-					long partnerId = body2.getId();
-					if (!marriedTo.contains(partnerId)) {
-						marriedTo.add(partnerId);
-						newTraces = new ArrayList<PVector>();
-					}
-				} else // married to the same person again
-					text = "Can't believe we fall in love again!"; // override
-																	// the
-																	// displaying
-																	// text
-			}
-		} else if (isDivorced) {
-			if (newTraces.size() <= 10) // Just break up
-				text = "We should take a break.";
-			else // return to the game
-				text = "Single.";
-			// just got divorced
-			if (this.isDivorced != isDivorced) {
-				this.isDivorced = isDivorced;
-				this.isMarried = false;
-				// remember all the traces being together
-				exTraces = newTraces;
-				newTraces = new ArrayList<PVector>(); // record new traces until
-														// meeting the next
-														// partner
-			}
-			newTraces.add(new PVector(centerX, centerY));
-		}
-
+		this.isMarried = isMarried;
+		this.isDivorced = isDivorced;
 	}
 
 	/**
@@ -144,7 +95,7 @@ public class Shape {
 			halfHeart(false); // right heart
 			break;
 		case 1: // is alone
-			app.fill(BLUE.getRGB());
+			app.fill(PURPLE.getRGB());
 			morph(sqrSet); //
 			break;
 		case 2: // more than one person
@@ -211,7 +162,7 @@ public class Shape {
 			// Get the vertex we will draw
 			PVector v2 = morphSet.get(i);
 			// Lerp to the target
-			v2.lerp(v1, (float) 0.05);
+			v2.lerp(v1, (float) 0.03);
 		}
 		app.noStroke();
 		app.pushMatrix();
@@ -235,10 +186,10 @@ public class Shape {
 	 * Displays the traces until meeting that ex
 	 */
 	public void breakUp() {
-		app.strokeWeight((float) 0.02);
+		app.strokeWeight((float) 0.01);
 		for (int i = 1; i < exTraces.size(); i++) {
 			// float val = (float) (i / exTraces.size() * 204.0 + 51);
-			app.stroke(255, 255, 255);
+			app.stroke(WHITE.getRed());
 			app.line(exTraces.get(i - 1).x, exTraces.get(i - 1).y, exTraces.get(i).x, exTraces.get(i).y);
 		}
 	}
@@ -298,7 +249,6 @@ public class Shape {
 
 	public void setIsMarried(boolean value) {
 		isMarried = value;
-
 	}
 
 	public boolean getIsDivorced() {
