@@ -82,7 +82,7 @@ public class Shape {
 	 * @param state
 	 */
 	public void draw(int state) {
-		if (isDivorced)
+		if (isDivorced && !isMarried)
 			breakUp(); // display traces of meeting ex
 
 		switch (state) {

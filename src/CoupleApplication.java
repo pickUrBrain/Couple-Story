@@ -6,7 +6,6 @@ import processing.core.PVector;
 import sun.audio.*;
 import java.io.*;
 
-
 /**
  * @author Crystal, Zhiling
  */
@@ -124,9 +123,8 @@ public class CoupleApplication extends PApplet {
 				}
 
 				if (bodyL.getJoint(Body.SHOULDER_RIGHT) != null && bodyR.getJoint(Body.SHOULDER_LEFT) != null) {
-
 					result = Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x));
-					System.out.println("result " + result);
+					// System.out.println("result " + result);
 				}
 			}
 		}
@@ -134,7 +132,6 @@ public class CoupleApplication extends PApplet {
 	}
 
 	public void drawHeart(Body bodyL, Body bodyR) {
-
 		Shape s1 = shapes.get(bodyL.getId());
 		Shape s2 = shapes.get(bodyR.getId());
 
@@ -212,7 +209,7 @@ public class CoupleApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("exitTest.kinect", 1);
+			kinectReader = new KinectBodyDataProvider("demo.kinect", 1);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		}
