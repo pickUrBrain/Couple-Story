@@ -22,8 +22,8 @@ public class CoupleApplication extends PApplet {
 	boolean isSquare = true;
 	boolean playMusic = false;
 	boolean married = false;
+	boolean drewHeart = false;
 
-	private Body body1;
 	private Body body2;
 	private Body bodyL;
 	private Body bodyR;
@@ -55,7 +55,6 @@ public class CoupleApplication extends PApplet {
 		int numPeople = shapes.size(); // tested: detects correct count of
 										// people
 		if (numPeople >= 2) {
-			body1 = null;
 			body2 = null;
 			isSquare = false;
 		} else if (numPeople == 1) {
@@ -63,16 +62,24 @@ public class CoupleApplication extends PApplet {
 			married = false;
 		}
 
+		//closest distance that will draw heart
 		float closeDistance = Float.MAX_VALUE;
 
+		//make sure there is no two hearts drawn in the same screen
 		for (Body b : tracker.getPeople().values()) {
 			Shape s = shapes.get(b.getId());
 			if (s != null) {
-
+				
 				if (numPeople == 1) {
-					body1 = b;
-					s.updateLocation(body1);
+					s.updateLocation(b);
 					s.draw(1);
+					drewHeart = false;
+				}
+				
+				//make sure if the heart was already drawn, just draw the circle
+				else if (numPeople >= 3 && drewHeart){
+					s.updateLocation(b);
+					drawCircle(b);
 				}
 
 				else {
@@ -83,26 +90,33 @@ public class CoupleApplication extends PApplet {
 						if (p != b) {
 							if (closeDistance > isClose(b, p)) {
 								closeDistance = isClose(b, p);
-								// body1 = b;
 								body2 = p;
 							}
 						}
 					}
 
-					// if there is already couple that is married, skip the body
-
 					s.update(b, s.getIsMarried(), body2, s.getIsDivorced());
 					if (closeDistance < 0.8) {
 						drawHeart(bodyL, bodyR);
+						drewHeart = true;
 					} else {
 						drawCircle(bodyL, bodyR);
+						drewHeart = false;
 					}
 				}
+				
+				
 
 			}
 		}
 	}
 
+	/**
+	 * detects which body is on the right and left to determine how to form a heart
+	 * @param b1
+	 * @param b2
+	 * @return
+	 */
 	public float isClose(Body b1, Body b2) {
 
 		float result = Float.MAX_VALUE;
@@ -124,18 +138,20 @@ public class CoupleApplication extends PApplet {
 
 				if (bodyL.getJoint(Body.SHOULDER_RIGHT) != null && bodyR.getJoint(Body.SHOULDER_LEFT) != null) {
 					result = Math.abs((bodyL.getJoint(Body.SHOULDER_RIGHT).x) - (bodyR.getJoint(Body.SHOULDER_LEFT).x));
-					// System.out.println("result " + result);
 				}
 			}
 		}
 		return result;
 	}
 
+	/**
+	 * Draws a left shape for left person and right shape for right person
+	 * @param bodyL
+	 * @param bodyR
+	 */
 	public void drawHeart(Body bodyL, Body bodyR) {
 		Shape s1 = shapes.get(bodyL.getId());
 		Shape s2 = shapes.get(bodyR.getId());
-
-		// if (!s1.getIsDivorced() && !s2.getIsDivorced()) {
 
 		// draw the heart
 		s1.draw(0);
@@ -148,10 +164,15 @@ public class CoupleApplication extends PApplet {
 			married = true;
 			playMusic = false;
 		}
-		// }
 
 	}
 
+	/**
+	 * draws a circle for two people and make sure to change the divorce state
+	 * called when two people are not close to each other
+	 * @param bodyL
+	 * @param bodyR
+	 */
 	public void drawCircle(Body bodyL, Body bodyR) {
 
 		Shape s1 = shapes.get(bodyL.getId());
@@ -179,12 +200,29 @@ public class CoupleApplication extends PApplet {
 		}
 		married = false;
 	}
+	
+	/**
+	 * draws a circle for remaining person
+	 * necessary to draw more than 2 people
+	 * @param body
+	 */
+	public void drawCircle(Body body){
+		
+		Shape s1 = shapes.get(body.getId());
+		s1.draw(2);
+		s1.setIsMarried(false);
+		s1.setIsDivorced(false);
+	}
+	
 
 	public void playMusic() {
 		music();
 		playMusic = true;
 	}
 
+	/**
+	 * plays music when the couple is apart and got divorced
+	 */
 	public static void music() {
 		AudioPlayer MGP = AudioPlayer.player;
 		AudioStream BGM;
@@ -209,7 +247,7 @@ public class CoupleApplication extends PApplet {
 		 * use this code to run your PApplet from data recorded by UPDRecorder
 		 */
 		try {
-			kinectReader = new KinectBodyDataProvider("demo.kinect", 1);
+			kinectReader = new KinectBodyDataProvider("exitTest.kinect", 1);
 		} catch (IOException e) {
 			System.out.println("Unable to create kinect producer");
 		}
